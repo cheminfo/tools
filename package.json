@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "ci": "./bin/ci.js",
-    "ci-build": "./bin/ci-build.js"
+    "cheminfo": "./bin/cheminfo.js",
+    "cheminfo-build": "./bin/cheminfo-build.js"
   },
   "repository": {
     "type": "git",
