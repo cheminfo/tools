@@ -6,7 +6,7 @@ CLI tools to help cheminfo developers
 
 `$ npm install -g cheminfo-tools`
 
-This will add a new `cheminfo` command to your system
+This will add a new `ci` command to your system
 
 ## Commands
 
@@ -22,4 +22,3 @@ Make a browser build using webpack
 ## License
 
   [MIT](./LICENSE)
-
