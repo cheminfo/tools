@@ -9,40 +9,49 @@ var fs = require('fs');
 
 program
     .option('-w, --cwd [dirname]', 'Working directory', process.cwd())
-    .option('-o, --out [dirname]', 'Output directory', 'dist');
+    .option('-o, --out [dirname]', 'Output directory', 'dist')
+    .option('-r, --root [rootname]', 'Root name of the library');
 
 program.parse(process.argv);
 
-var cwd = program.cwd;
-var entryPoint = tryPackage(cwd) || 'index.js';
+var cwd = path.resolve(program.cwd);
+var pkg = tryPackage(cwd);
+var entryPoint = pkg.main || 'index.js';
 if (!fs.existsSync(path.join(cwd, entryPoint))) {
     throw new Error('No entry point found in ' + cwd);
 }
 
-var compiler = webpack({
+var name = program.root || pkg.name;
+if (!name) {
+    throw new Error('No name found');
+}
+
+var filename = (pkg.name || 'bundle') + '.js';
+
+var webpackConfig = {
     context: cwd,
     entry: entryPoint,
     output: {
         path: path.join(cwd, program.out),
-        filename: 'bundle.js',
-        library: 'AwesomeLib',
+        filename: filename,
+        library: name,
         libraryTarget: 'umd'
     }
-});
+};
 
-compiler.run(function (err) {
+webpack(webpackConfig, function (err) {
     if (err) {
         throw err;
     } else {
-        console.log('Build successful');
+        console.log('Build of ' + name + ' successful');
     }
 });
 
 function tryPackage(cwd) {
     var pkg = path.join(cwd, 'package.json');
     try {
-        return JSON.parse(fs.readFileSync(pkg, 'utf8')).main;
+        return JSON.parse(fs.readFileSync(pkg, 'utf8'));
     } catch (e) {
-        return false;
+        return {};
     }
 }
