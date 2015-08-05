@@ -23,6 +23,10 @@ var entryPoint = program.entry || pkg.main || 'index.js';
 var name = program.root || pkg.name;
 if (!name) {
     throw new Error('No name found');
+} else if (name.indexOf('-') > 0) {
+    name = name.replace(/[.-](\w)?/g, function (_, x) {
+        return x ? x.toUpperCase() : '';
+    });
 }
 
 var filename = pkg.name || 'bundle';
