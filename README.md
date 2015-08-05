@@ -19,6 +19,7 @@ Make a browser build using webpack
 * **-c, --cwd**: directory of the project to build. Default: current working directory
 * **-o, --out**: directory where to put the build files. Default: dist
 * **-r, --root**: root name of the library. Default: name of npm package
+* **-e, --entry**: entry point of the library. Default: main field of npm package or index.js
 * **-u, --no-uglify**: disable generation of min file and source map
 
 ## License

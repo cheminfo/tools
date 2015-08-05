@@ -11,13 +11,14 @@ program
     .option('-w, --cwd [dirname]', 'Working directory', process.cwd())
     .option('-o, --out [dirname]', 'Output directory', 'dist')
     .option('-r, --root [rootname]', 'Root name of the library')
+    .option('-e, --entry [file]', 'Library entry point')
     .option('-u, --no-uglify', 'Disable generation of min file with source map');
 
 program.parse(process.argv);
 
 var cwd = path.resolve(program.cwd);
 var pkg = tryPackage(cwd);
-var entryPoint = pkg.main || 'index.js';
+var entryPoint = program.entry || pkg.main || 'index.js';
 
 var name = program.root || pkg.name;
 if (!name) {
@@ -39,13 +40,14 @@ var webpackConfig = {
 };
 
 webpack(webpackConfig, function (err, stats) {
+    var jsonStats = stats.toJson();
     if (err) {
         throw err;
-    } else if (stats.errors) {
-        console.error(stats.errors);
+    } else if (jsonStats.errors.length > 0) {
+        printErrors(jsonStats.errors);
         process.exit(1);
-    } else if (stats.warnings) {
-        console.error(stats.warnings);
+    } else if (jsonStats.warnings.length > 0) {
+        printErrors(jsonStats.warnings);
     } else {
         console.log('Build of ' + filename + ' successful');
         if (program.uglify) {
@@ -61,13 +63,14 @@ function doMinify() {
         minify: true
     }));
     webpack(webpackConfig, function (err, stats) {
+        var jsonStats = stats.toJson();
         if (err) {
             throw err;
-        } else if (stats.errors) {
-            console.error(stats.errors);
+        } else if (jsonStats.errors.length > 0) {
+            printErrors(jsonStats.errors);
             process.exit(1);
-        } else if (stats.warnings) {
-            console.error(stats.warnings);
+        } else if (jsonStats.warnings.length > 0) {
+            printErrors(jsonStats.warnings);
         } else {
             console.log('Build of ' + filename + ' (min) successful');
         }
@@ -81,4 +84,10 @@ function tryPackage(cwd) {
     } catch (e) {
         return {};
     }
+}
+
+function printErrors(errors) {
+    errors.forEach(function (error) {
+        console.error(error);
+    });
 }
