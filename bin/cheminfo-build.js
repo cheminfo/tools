@@ -12,7 +12,9 @@ program
     .option('-o, --out [dirname]', 'Output directory', 'dist')
     .option('-r, --root [rootname]', 'Root name of the library')
     .option('-e, --entry [file]', 'Library entry point')
-    .option('-u, --no-uglify', 'Disable generation of min file with source map');
+    .option('-u, --no-uglify', 'Disable generation of min file with source map')
+    .option('-v, --verbose', 'Output warnings if any');
+
 
 program.parse(process.argv);
 
@@ -50,7 +52,7 @@ webpack(webpackConfig, function (err, stats) {
     } else if (jsonStats.errors.length > 0) {
         printErrors(jsonStats.errors);
         process.exit(1);
-    } else if (jsonStats.warnings.length > 0) {
+    } else if (jsonStats.warnings.length > 0 && program.verbose) {
         printErrors(jsonStats.warnings);
     } else {
         console.log('Build of ' + filename + ' successful');
@@ -73,7 +75,7 @@ function doMinify() {
         } else if (jsonStats.errors.length > 0) {
             printErrors(jsonStats.errors);
             process.exit(1);
-        } else if (jsonStats.warnings.length > 0) {
+        } else if (jsonStats.warnings.length > 0 && program.verbose) {
             printErrors(jsonStats.warnings);
         } else {
             console.log('Build of ' + filename + ' (min) successful');
