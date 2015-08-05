@@ -18,9 +18,6 @@ program.parse(process.argv);
 var cwd = path.resolve(program.cwd);
 var pkg = tryPackage(cwd);
 var entryPoint = pkg.main || 'index.js';
-if (!fs.existsSync(path.join(cwd, entryPoint))) {
-    throw new Error('No entry point found in ' + cwd);
-}
 
 var name = program.root || pkg.name;
 if (!name) {
@@ -31,7 +28,7 @@ var filename = pkg.name || 'bundle';
 
 var webpackConfig = {
     context: cwd,
-    entry: entryPoint,
+    entry: path.join(cwd, entryPoint),
     output: {
         path: path.join(cwd, program.out),
         filename: filename + '.js',
@@ -41,9 +38,14 @@ var webpackConfig = {
     plugins: []
 };
 
-webpack(webpackConfig, function (err) {
+webpack(webpackConfig, function (err, stats) {
     if (err) {
         throw err;
+    } else if (stats.errors) {
+        console.error(stats.errors);
+        process.exit(1);
+    } else if (stats.warnings) {
+        console.error(stats.warnings);
     } else {
         console.log('Build of ' + filename + ' successful');
         if (program.uglify) {
@@ -58,9 +60,14 @@ function doMinify() {
     webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({
         minify: true
     }));
-    webpack(webpackConfig, function (err) {
+    webpack(webpackConfig, function (err, stats) {
         if (err) {
             throw err;
+        } else if (stats.errors) {
+            console.error(stats.errors);
+            process.exit(1);
+        } else if (stats.warnings) {
+            console.error(stats.warnings);
         } else {
             console.log('Build of ' + filename + ' (min) successful');
         }
