@@ -10,9 +10,10 @@ var fs = require('fs');
 program
     .option('-c, --cwd [dirname]', 'Working directory', process.cwd())
     .option('-o, --out [dirname]', 'Output directory', 'dist')
+    .option('-n, --out-name [name]', 'Name of the output file')
     .option('-r, --root [rootname]', 'Root name of the library')
     .option('-e, --entry [file]', 'Library entry point')
-    .option('-n, --name [name]', 'Name of the output file')
+    .option('-b, --babel', 'Enable babel loader for ES6 features')
     .option('-u, --no-uglify', 'Disable generation of min file with source map')
     .option('-v, --verbose', 'Output warnings if any');
 
@@ -32,11 +33,14 @@ if (!name) {
     });
 }
 
-var filename = program.name || pkg.name || 'bundle';
+var filename = program.outName || pkg.name || 'bundle';
 
 var webpackConfig = {
     context: cwd,
     entry: path.join(cwd, entryPoint),
+    module: {
+        loaders: []
+    },
     output: {
         path: path.join(cwd, program.out),
         filename: filename + '.js',
@@ -45,6 +49,26 @@ var webpackConfig = {
     },
     plugins: []
 };
+
+if (program.babel) {
+    var babel = program.babel;
+    var babelConfig = {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel'
+    };
+    // TODO wait for webpack 2 to support ES6
+    //if (typeof babel === 'string') {
+    //    if (babel === 'chrome') { // blacklist features supported by latest Chrome
+    //        babelConfig.loader += '?blacklist[]=es6.classes'
+    //    } else if (babel.indexOf('custom:') === 0) {
+    //
+    //    } else {
+    //        throw new Error('Unknown babel option: ' + babel);
+    //    }
+    //}
+    webpackConfig.module.loaders.push(babelConfig);
+}
 
 webpack(webpackConfig, function (err, stats) {
     var jsonStats = stats.toJson();
