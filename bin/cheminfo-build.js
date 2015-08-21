@@ -51,13 +51,13 @@ var webpackConfig = {
 };
 
 if (program.babel) {
-    var babel = program.babel;
     var babelConfig = {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel'
+        loader: path.resolve(__dirname, '../node_modules/babel-loader')
     };
     // TODO wait for webpack 2 to support ES6
+    //var babel = program.babel;
     //if (typeof babel === 'string') {
     //    if (babel === 'chrome') { // blacklist features supported by latest Chrome
     //        babelConfig.loader += '?blacklist[]=es6.classes'
