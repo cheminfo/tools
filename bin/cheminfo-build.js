@@ -8,10 +8,11 @@ var path = require('path');
 var fs = require('fs');
 
 program
-    .option('-w, --cwd [dirname]', 'Working directory', process.cwd())
+    .option('-c, --cwd [dirname]', 'Working directory', process.cwd())
     .option('-o, --out [dirname]', 'Output directory', 'dist')
     .option('-r, --root [rootname]', 'Root name of the library')
     .option('-e, --entry [file]', 'Library entry point')
+    .option('-n, --name [name]', 'Name of the output file')
     .option('-u, --no-uglify', 'Disable generation of min file with source map')
     .option('-v, --verbose', 'Output warnings if any');
 
@@ -31,7 +32,7 @@ if (!name) {
     });
 }
 
-var filename = pkg.name || 'bundle';
+var filename = program.name || pkg.name || 'bundle';
 
 var webpackConfig = {
     context: cwd,
