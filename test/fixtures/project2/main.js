@@ -8,4 +8,11 @@ class A {
     }
 }
 
+const y = [0, 1];
+for (let i of y) {
+    console.log(i);
+}
+
+let [, a] = y;
+
 module.exports = A;
