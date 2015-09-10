@@ -28,6 +28,24 @@ Make a browser build using webpack
 * **-u, --no-uglify**: disable generation of min file and source map
 * **-v, --verbose**: output warnings if any
 
+### publish
+
+Test, bump and publish a project on npm.  
+You need to run the command from the root of the project's directory. It is __only__ for npm-only packages. Please use the GRM for browser packages.
+
+Usage: `cheminfo publish <version> <org>`
+
+#### Example
+
+`cheminfo publish major cheminfo`
+
+This will:
+* Run the tests
+* Bump the version number to the next major
+* Publish on npm
+* Add admins from the cheminfo organization to npm owners
+* Push the changes to GitHub
+
 ## License
 
   [MIT](./LICENSE)
