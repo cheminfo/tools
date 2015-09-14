@@ -55,7 +55,7 @@ if (program.babel) {
     var babelConfig = {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: path.resolve(__dirname, '../node_modules/babel-loader')
+        loader: path.dirname(require.resolve('babel-loader'))
     };
     var blacklist = [ // disable useless transformers
         'es3.memberExpressionLiterals',
