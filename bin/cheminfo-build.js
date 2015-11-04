@@ -43,7 +43,7 @@ var webpackConfig = {
         loaders: [
             {
                 test: /.json$/,
-                loader: 'json-loader'
+                loader: path.dirname(require.resolve('json-loader'))
             }
         ]
     },
