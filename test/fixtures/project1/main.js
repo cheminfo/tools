@@ -1,3 +1,5 @@
 'use strict';
 
-module.exports = 42;
+var data = require('./main.json');
+
+module.exports = data.value;

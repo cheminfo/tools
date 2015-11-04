@@ -40,7 +40,12 @@ var webpackConfig = {
     context: cwd,
     entry: path.join(cwd, entryPoint),
     module: {
-        loaders: []
+        loaders: [
+            {
+                test: /.json$/,
+                loader: 'json-loader'
+            }
+        ]
     },
     output: {
         path: path.join(cwd, program.out),
