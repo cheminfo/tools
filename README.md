@@ -22,9 +22,6 @@ Make a browser build using webpack
 * **-r, --root**: root name of the library. Default: name of npm package (camelCase)
 * **-e, --entry**: entry point of the library. Default: main field of npm package or index.js
 * **-b, --babel**: enable babel loader for ES6 features
-* **--babel-blacklist**: specify babel transformer blacklist. Possible values:
- * `chrome`: use predefined list of features supported by the latest Chrome version
- * `custom:es6.constants,es6.classes,...`: provide your own comma-separated list
 * **-u, --no-uglify**: disable generation of min file and source map
 * **-v, --verbose**: output warnings if any
 

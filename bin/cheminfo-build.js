@@ -14,7 +14,6 @@ program
     .option('-r, --root [rootname]', 'Root name of the library')
     .option('-e, --entry [file]', 'Library entry point')
     .option('-b, --babel', 'Enable babel loader for ES6 features')
-    .option('--babel-blacklist [list]', 'Specify babel transformer blacklist')
     .option('-u, --no-uglify', 'Disable generation of min file with source map')
     .option('-v, --verbose', 'Output warnings if any');
 
@@ -60,34 +59,11 @@ if (program.babel) {
     var babelConfig = {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: path.dirname(require.resolve('babel-loader'))
-    };
-    var blacklist = [ // disable useless transformers
-        'es3.memberExpressionLiterals',
-        'es3.propertyLiterals',
-        'es5.properties.mutators'
-    ];
-    var babelBlacklist = program.babelBlacklist;
-    if (babelBlacklist) {
-        if (babelBlacklist === 'chrome') { // blacklist features supported by latest stable Chrome
-            blacklist = blacklist.concat([
-                'es6.classes',
-                'es6.constants',
-                'es6.forOf',
-                'es6.properties.computed',
-                'es6.properties.shorthand',
-                'es6.templateLiterals',
-                'regenerator'
-            ]);
-        } else if (babelBlacklist.indexOf('custom:') === 0) { // custom blacklist, eg. custom:es6.classes,es6.constants
-            blacklist = blacklist.concat(babelBlacklist.substring(7).split(','));
-        } else {
-            throw new Error('Unknown babel blacklist option: ' + babelBlacklist);
+        loader: path.dirname(require.resolve('babel-loader')),
+        query: {
+            presets: ['es2015']
         }
-    }
-    babelConfig.loader += '?' + blacklist.map(function (bl) {
-            return 'blacklist[]=' + bl;
-        }).join('&');
+    };
     webpackConfig.module.loaders.push(babelConfig);
 }
 
