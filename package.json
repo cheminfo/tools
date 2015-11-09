@@ -31,7 +31,7 @@
     "co": "^4.6.0",
     "commander": "^2.9.0",
     "json-loader": "^0.5.3",
-    "mz": "^2.0.0",
+    "mz": "^2.1.0",
     "superagent": "^1.4.0",
     "superagent-promise": "^1.0.3",
     "webpack": "^1.12.3"
