@@ -34,6 +34,6 @@
     "mz": "^2.1.0",
     "superagent": "^1.4.0",
     "superagent-promise": "^1.0.3",
-    "webpack": "^1.12.4"
+    "webpack": "^1.12.6"
   }
 }
