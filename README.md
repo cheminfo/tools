@@ -43,6 +43,41 @@ This will:
 * Add admins from the cheminfo organization to npm owners
 * Push the changes to GitHub
 
+### generate
+
+Generates a basic project structure based in the giving organization.
+You need to run the command from the root of the project's directory.
+
+Usage: `cheminfo generate <org>`
+
+#### Example
+
+`cheminfo generate ml`
+
+The generator will prompt for the next fields:
+
+  * __Your project name__: the package name, without the `ml-` start
+  * __Your name__: your [NPM name](https://docs.npmjs.com/files/package.json#people-fields-author-contributors)
+  * __Your package description__: A description to show in [NPM](https://docs.npmjs.com/files/package.json#description-1)
+  * __Your package version__: The package version. The default value is _0.0.1_.
+
+When the generator finish there will be the following files:
+
+```
+.
+├── .eslintrc.yml
+├── .gitignore
+├── .travis.yml
+├── History.md
+├── LICENSE
+├── README.md
+├── package.json
+├── src
+│   └── index.js
+└── test
+    └── test.js
+```
+
 ## License
 
   [MIT](./LICENSE)
