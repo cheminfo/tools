@@ -18,6 +18,9 @@
     "tools"
   ],
   "author": "Michaël Zasso",
+  "contributors": [
+    "Miguel Asencio <maasencioh@gmail.com> (https://github.com/maasencioh)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cheminfo/tools/issues"

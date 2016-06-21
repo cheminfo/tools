@@ -9,6 +9,7 @@ program.version(pkg.version);
 
 program
     .command('build', 'build a project for the browser')
-    .command('publish', 'bump and publish a project on npm');
+    .command('publish', 'bump and publish a project on npm')
+    .command('generate', 'generates a basic project structure');
 
 program.parse(process.argv);
