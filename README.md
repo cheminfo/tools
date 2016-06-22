@@ -45,7 +45,7 @@ This will:
 
 ### generate
 
-Generates a basic project structure based in the giving organization.
+Generates a basic project structure based in the giving organization (see [generator-mljs-packages](https://github.com/mljs/generator-mljs-packages)).
 You need to run the command from the root of the project's directory.
 
 Usage: `cheminfo generate <org>`
@@ -59,7 +59,8 @@ The generator will prompt for the next fields:
   * __Your project name__: the package name, without the `ml-` start
   * __Your name__: your [NPM name](https://docs.npmjs.com/files/package.json#people-fields-author-contributors)
   * __Your package description__: A description to show in [NPM](https://docs.npmjs.com/files/package.json#description-1)
-  * __Your package version__: The package version. The default value is _0.0.1_.
+  * __Your package version__: The package version. The default value is `0.0.1`
+  * __Run NPM install?__: Run `npm install` after the template generation
 
 When the generator finish there will be the following files:
 
