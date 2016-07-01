@@ -6,6 +6,7 @@ const program = require('commander');
 const co = require('co');
 const fs = require('mz/fs');
 const child_process = require('mz/child_process');
+const git = require('ggit');
 const path = require('path');
 const request = require('request-promise');
 
@@ -24,8 +25,20 @@ if (!version) program.missingArgument('version');
 
 co(function *(){
 
+    const currentBranch = yield git.branchName();
+    if (currentBranch !== 'master') {
+        console.error(`you must be on master branch. Current branch: ${currentBranch}`);
+        return;
+    }
+
+    const hasChanges = yield git.hasChanges();
+    if (hasChanges) {
+        console.error(`you have uncommitted changes.`);
+        return;
+    }
+
     // Get admin list for org
-    var adminInfo = yield request('http://www.cheminfo.org/_tools/admin.json', {json: true});
+    var adminInfo = yield request('https://www.cheminfo.org/_tools/admin.json', {json: true});
     var adminList = adminInfo[org];
     if (!adminList) {
         console.error('could not find admin list for ' + org);
