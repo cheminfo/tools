@@ -36,8 +36,7 @@
     "generator-mljs-packages": "^1.1.0",
     "json-loader": "^0.5.4",
     "mz": "^2.4.0",
-    "superagent": "^1.8.3",
-    "superagent-promise": "^1.1.0",
+    "request-promise": "^3.0.0",
     "webpack": "^1.13.0",
     "yeoman-environment": "^1.6.1"
   }

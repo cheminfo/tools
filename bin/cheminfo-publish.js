@@ -7,7 +7,7 @@ const co = require('co');
 const fs = require('mz/fs');
 const child_process = require('mz/child_process');
 const path = require('path');
-const agent = require('../src/common').superagent;
+const request = require('request-promise');
 
 let version, org;
 
@@ -25,7 +25,7 @@ if (!version) program.missingArgument('version');
 co(function *(){
 
     // Get admin list for org
-    var adminInfo = (yield agent.get('http://www.cheminfo.org/_tools/admin.json')).body;
+    var adminInfo = yield request('http://www.cheminfo.org/_tools/admin.json', {json: true});
     var adminList = adminInfo[org];
     if (!adminList) {
         console.error('could not find admin list for ' + org);
