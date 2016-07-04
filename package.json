@@ -40,6 +40,7 @@
     "ggit": "^1.10.0",
     "inquirer": "^1.1.0",
     "json-loader": "^0.5.4",
+    "latest-version": "^2.0.0",
     "mz": "^2.4.0",
     "request-promise": "^3.0.0",
     "semver": "^5.2.0",

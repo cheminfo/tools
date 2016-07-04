@@ -14,25 +14,33 @@ const path = require('path');
 const request = require('request-promise');
 const semver = require('semver');
 
+const util = require('../src/util');
+
 let version, org;
 
 program
     .option('-b, --bump <bump>', 'kind of version bump')
-    .option('-o, --org <org>', 'organization');
+    .option('-o, --org <org>', 'organization')
+    .option('-f, --force', 'allows to bypass some checks');
 
 program.parse(process.argv);
 
+const force = program.force;
+
 co(function *(){
+
+    const shouldStop = yield util.checkLatestVersion(force);
+    if (shouldStop) return;
 
     const currentBranch = yield git.branchName();
     if (currentBranch !== 'master') {
-        console.error(`you must be on master branch. Current branch: ${currentBranch}`);
+        console.error(`You must be on master branch. Current branch: ${currentBranch}`);
         return;
     }
 
     const hasChanges = yield git.hasChanges();
     if (hasChanges) {
-        console.error(`you have uncommitted changes.`);
+        console.error(`You have uncommitted changes.`);
         return;
     }
 
@@ -44,7 +52,7 @@ co(function *(){
     const orgs = Object.keys(adminInfo).filter(org => adminInfo[org].includes(name));
 
     if (orgs.length === 0) {
-        console.error('found no org with publish rights');
+        console.error('Found no org with publish rights');
         return;
     }
 
@@ -59,7 +67,7 @@ co(function *(){
     }
 
     if (!orgs.includes(org)) {
-        console.error(`org (${org}) does not exist or you (${name}) are not allowed to publish in it`);
+        console.error(`Org (${org}) does not exist or you (${name}) are not allowed to publish in it`);
         return;
     }
 
@@ -84,7 +92,7 @@ co(function *(){
     try {
         owners = parseOwners(yield execNpm('owner ls'));
         if (owners.indexOf(name) === -1)
-            throw new Error(`you (${name}) are not allowed to publish ${packageName}.
+            throw new Error(`You (${name}) are not allowed to publish ${packageName}.
 You can ask one of the current owners for permission: ${owners}`);
     } catch (e) {
         if (e.message.indexOf('is not in the npm registry') === -1) {
@@ -96,13 +104,14 @@ You can ask one of the current owners for permission: ${owners}`);
     let bump = program.bump;
 
     if (bump && bump !== 'major' && bump !== 'minor' && bump !== 'patch') {
-        console.error(`invalid bump type: ${bump}`);
+        console.error(`Invalid bump type: ${bump}`);
+        return;
     }
 
-    console.log(`current version: ${packageVersion}`);
+    console.log(`Current version: ${packageVersion}`);
     if (!bump) {
         console.log(`${toBump.reason}`);
-        console.log(`recommended bump: ${formatToBump(toBump.releaseAs)}`);
+        console.log(`Recommended bump: ${formatToBump(toBump.releaseAs)}`);
         bump = (yield inquirer.prompt({
             type: 'list',
             name: 'bump',
@@ -115,7 +124,7 @@ You can ask one of the current owners for permission: ${owners}`);
             default: toBump.releaseAs
         })).bump;
     } else if (bump !== toBump.releaseAs) {
-        console.log(`recommended bump is ${formatToBump(toBump.releaseAs)}.
+        console.log(`Recommended bump is ${formatToBump(toBump.releaseAs)}.
 You chose ${formatToBump(bump)} instead.`);
         const confirm = (yield inquirer.prompt({
             type: 'confirm',
@@ -152,7 +161,7 @@ You chose ${formatToBump(bump)} instead.`);
         log(yield child_process.exec('git push --follow-tags'));
     } catch (e) {
         console.error(e);
-        console.error('command "git push --follow-tags" failed.\nYou need to resolve the problem manually');
+        console.error('Command "git push --follow-tags" failed.\nYou need to resolve the problem manually');
     }
 
 }).catch(function (err) {
