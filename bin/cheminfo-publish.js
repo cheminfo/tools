@@ -4,6 +4,7 @@
 
 const program = require('commander');
 const co = require('co');
+const concat = require('concat-stream');
 const fs = require('mz/fs');
 const child_process = require('mz/child_process');
 const changelog = require('conventional-changelog');
@@ -143,6 +144,9 @@ You chose ${formatToBump(bump)} instead.`);
     console.log('Bumping version');
     log(yield execNpm('version ' + bump));
 
+    // Add/update changelog
+    yield updateHistory();
+
     // Publish package
     console.log('Publishing package');
     log(yield execNpm('publish'));
@@ -197,5 +201,35 @@ function getRecommendedBump() {
             if (err) return reject(err);
             resolve(result);
         });
+    });
+}
+
+function *updateHistory() {
+    const HISTORY_FILE = 'History.md';
+    const changelogOptions = {
+        preset: 'angular'
+    };
+    if (yield fs.exists(HISTORY_FILE)) { // File exists. Append latest version to current history.
+        const newHistory = yield createChangelog(changelogOptions);
+        if (newHistory.length === 0) {
+            console.error('No history to write. There must be a problem.');
+            return;
+        }
+        const currentHistory = yield fs.readFile(HISTORY_FILE);
+        const concat = Buffer.concat([newHistory, currentHistory], newHistory.length + currentHistory.length);
+        yield fs.writeFile(HISTORY_FILE, concat);
+    } else { // File does not exist. Generate full history.
+        changelogOptions.releaseCount = 0;
+        const history = yield createChangelog(changelogOptions);
+        yield fs.writeFile(HISTORY_FILE, history);
+    }
+}
+
+function createChangelog(options) {
+    return new Promise((resolve, reject) => {
+        const changelogStream = changelog(options);
+        const concatStream = concat(resolve);
+        changelogStream.on('error', reject);
+        changelogStream.pipe(concatStream);
     });
 }
