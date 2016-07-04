@@ -6,22 +6,21 @@ const program = require('commander');
 const co = require('co');
 const fs = require('mz/fs');
 const child_process = require('mz/child_process');
+const changelog = require('conventional-changelog');
+const inquirer = require('inquirer');
+const recommendedBump = require('conventional-recommended-bump');
 const git = require('ggit');
 const path = require('path');
 const request = require('request-promise');
+const semver = require('semver');
 
 let version, org;
 
 program
-    .arguments('<version> <org>')
-    .action(function (_version, _org) {
-        version = _version;
-        org = _org;
-    });
+    .option('-b, --bump <bump>', 'kind of version bump')
+    .option('-o, --org <org>', 'organization');
 
 program.parse(process.argv);
-
-if (!version) program.missingArgument('version');
 
 co(function *(){
 
@@ -37,36 +36,94 @@ co(function *(){
         return;
     }
 
+    // Get npm username
+    const name = parseName(yield execNpm('whoami'));
+
     // Get admin list for org
-    var adminInfo = yield request('https://www.cheminfo.org/_tools/admin.json', {json: true});
-    var adminList = adminInfo[org];
-    if (!adminList) {
-        console.error('could not find admin list for ' + org);
-        let orgList = [];
-        for (let org in adminInfo) orgList.push(org);
-        console.error('supported organizations: ' + orgList.join(', '));
+    const adminInfo = yield request('https://www.cheminfo.org/_tools/admin.json', {json: true});
+    const orgs = Object.keys(adminInfo).filter(org => adminInfo[org].includes(name));
+
+    if (orgs.length === 0) {
+        console.error('found no org with publish rights');
         return;
     }
 
-    // Get the name of the package
-    var packageJSON = require(path.resolve('package.json'));
-    var packageName = packageJSON.name;
+    let org = program.org;
+    if (!org) {
+        org = (yield inquirer.prompt({
+            type: 'list',
+            message: 'Choose an organization',
+            name: 'org',
+            choices: orgs
+        })).org;
+    }
 
-    // Get npm username
-    var name = parseName(yield execNpm('whoami'));
-    if (adminList.indexOf(name) === -1)
-        throw new Error(`you (${name}) are not allowed to publish in ${org}`);
+    if (!orgs.includes(org)) {
+        console.error(`org (${org}) does not exist or you (${name}) are not allowed to publish in it`);
+        return;
+    }
+
+    var adminList = adminInfo[org];
+
+    // Get the name of the package
+    const packageJSON = require(path.resolve('package.json'));
+    const packageName = packageJSON.name;
+    const packageVersion = packageJSON.version;
+    const bumpVersion = {
+        major: semver.inc(packageVersion, 'major'),
+        minor: semver.inc(packageVersion, 'minor'),
+        patch: semver.inc(packageVersion, 'patch')
+    };
+
+    function formatToBump(type) {
+        return `${type} (${bumpVersion[type]})`;
+    }
 
     // Get npm info on the package
     var owners = [];
     try {
         owners = parseOwners(yield execNpm('owner ls'));
         if (owners.indexOf(name) === -1)
-            throw new Error(`you (${name}) are not allowed to publish ${packageName}`);
+            throw new Error(`you (${name}) are not allowed to publish ${packageName}.
+You can ask one of the current owners for permission: ${owners}`);
     } catch (e) {
         if (e.message.indexOf('is not in the npm registry') === -1) {
             throw e;
         }
+    }
+
+    const toBump = yield getRecommendedBump();
+    let bump = program.bump;
+
+    if (bump && bump !== 'major' && bump !== 'minor' && bump !== 'patch') {
+        console.error(`invalid bump type: ${bump}`);
+    }
+
+    console.log(`current version: ${packageVersion}`);
+    if (!bump) {
+        console.log(`${toBump.reason}`);
+        console.log(`recommended bump: ${formatToBump(toBump.releaseAs)}`);
+        bump = (yield inquirer.prompt({
+            type: 'list',
+            name: 'bump',
+            message: 'Confirm bump',
+            choices: [
+                {name: formatToBump('major'), value: 'major'},
+                {name: formatToBump('minor'), value: 'minor'},
+                {name: formatToBump('patch'), value: 'patch'}
+            ],
+            default: toBump.releaseAs
+        })).bump;
+    } else if (bump !== toBump.releaseAs) {
+        console.log(`recommended bump is ${formatToBump(toBump.releaseAs)}.
+You chose ${formatToBump(bump)} instead.`);
+        const confirm = (yield inquirer.prompt({
+            type: 'confirm',
+            name: 'c',
+            message: 'Are you sure',
+            default: false
+        })).c;
+        if (!confirm) return;
     }
 
     // Execute the tests
@@ -75,7 +132,7 @@ co(function *(){
 
     // Bump version
     console.log('Bumping version');
-    log(yield execNpm('version ' + version));
+    log(yield execNpm('version ' + bump));
 
     // Publish package
     console.log('Publishing package');
@@ -123,4 +180,13 @@ function filterEmpty(el) {
 function log(result) {
     if (result[0]) process.stdout.write(result[0]);
     if (result[1]) process.stderr.write(result[1]);
+}
+
+function getRecommendedBump() {
+    return new Promise((resolve, reject) => {
+        recommendedBump({preset: 'angular'}, function (err, result) {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
 }

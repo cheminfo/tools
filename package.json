@@ -33,6 +33,8 @@
     "chalk": "^1.1.3",
     "co": "^4.6.0",
     "commander": "^2.9.0",
+    "conventional-changelog": "^1.1.0",
+    "conventional-recommended-bump": "^0.2.1",
     "documentation": "^4.0.0-beta5",
     "generator-mljs-packages": "^1.1.0",
     "ggit": "^1.10.0",
@@ -40,6 +42,7 @@
     "json-loader": "^0.5.4",
     "mz": "^2.4.0",
     "request-promise": "^3.0.0",
+    "semver": "^5.2.0",
     "webpack": "^1.13.0",
     "yeoman-environment": "^1.6.1"
   }
