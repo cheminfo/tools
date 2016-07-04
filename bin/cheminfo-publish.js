@@ -3,15 +3,15 @@
 'use strict';
 
 const program = require('commander');
+const changelog = require('conventional-changelog');
+const child_process = require('mz/child_process');
 const co = require('co');
 const concat = require('concat-stream');
 const fs = require('mz/fs');
-const child_process = require('mz/child_process');
-const changelog = require('conventional-changelog');
-const inquirer = require('inquirer');
-const recommendedBump = require('conventional-recommended-bump');
 const git = require('ggit');
+const inquirer = require('inquirer');
 const path = require('path');
+const recommendedBump = require('conventional-recommended-bump');
 const request = require('request-promise');
 const semver = require('semver');
 
@@ -22,7 +22,8 @@ let version, org;
 program
     .option('-b, --bump <bump>', 'kind of version bump')
     .option('-o, --org <org>', 'organization')
-    .option('-f, --force', 'allows to bypass some checks');
+    .option('-f, --force', 'allows to bypass some checks')
+    .option('-D, --no-doc', 'do not generate and publish documentation');
 
 program.parse(process.argv);
 
@@ -168,6 +169,9 @@ You chose ${formatToBump(bump)} instead.`);
         console.error('Command "git push --follow-tags" failed.\nYou need to resolve the problem manually');
     }
 
+    // Documentation
+    yield generateDoc();
+
 }).catch(function (err) {
     console.error(err);
 });
@@ -232,4 +236,27 @@ function createChangelog(options) {
         changelogStream.on('error', reject);
         changelogStream.pipe(concatStream);
     });
+}
+
+function *generateDoc() {
+    if (!program.doc) return;
+
+    const hasDoc = yield fs.exists('doc');
+    let wantsDoc = true;
+    if (!hasDoc) {
+        console.log('This project has no doc folder');
+        wantsDoc = (yield inquirer.prompt({
+            type: 'confirm',
+            name: 'c',
+            message: 'Do you want to create it',
+            default: true
+        })).c;
+    }
+    if (wantsDoc) {
+        yield child_process.exec('documentation build --github --output doc --format html');
+        yield child_process.exec('git add doc');
+        yield child_process.exec('git commit -m "doc: rebuild doc"');
+        yield child_process.exec('git push origin master');
+        yield child_process.exec('git subtree push --prefix doc origin gh-pages');
+    }
 }
