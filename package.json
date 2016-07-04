@@ -39,7 +39,7 @@
     "documentation": "^4.0.0-beta5",
     "generator-mljs-packages": "^1.1.0",
     "ggit": "^1.10.0",
-    "inquirer": "^1.1.0",
+    "inquirer": "^1.1.1",
     "json-loader": "^0.5.4",
     "latest-version": "^2.0.0",
     "mz": "^2.4.0",
