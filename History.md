@@ -1,3 +1,13 @@
+<a name="1.4.1"></a>
+## [1.4.1](https://github.com/cheminfo/tools/compare/v1.4.0...v1.4.1) (2016-07-05)
+
+
+### Bug Fixes
+
+* **publish:** fix history generation ([9acd163](https://github.com/cheminfo/tools/commit/9acd163))
+
+
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/cheminfo/tools/compare/v1.3.4...v1.4.0) (2016-07-04)
 
