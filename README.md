@@ -30,17 +30,19 @@ Make a browser build using webpack
 Test, bump and publish a project on npm.  
 You need to run the command from the root of the project's directory. It is __only__ for npm-only packages. Please use the GRM for browser packages.
 
-Usage: `cheminfo publish <version> <org>`
+Usage: `cheminfo publish -o <org> -b <version>`
 
 #### Example
 
-`cheminfo publish major cheminfo`
+`cheminfo publish -o cheminfo -b major`
 
 This will:
 * Run the tests
 * Bump the version number to the next major
+* Update the history file
 * Publish on npm
 * Add admins from the cheminfo organization to npm owners
+* Create documentation and publish it in gh-pages (optional)
 * Push the changes to GitHub
 
 ### generate
