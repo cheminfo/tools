@@ -76,7 +76,8 @@ co(function *(){
     var adminList = adminInfo[org];
 
     // Get the name of the package
-    const packageJSON = require(path.resolve('package.json'));
+    const packgeJSONPath = path.resolve('package.json');
+    const packageJSON = require(packgeJSONPath);
     const packageName = packageJSON.name;
     const packageVersion = packageJSON.version;
     const bumpVersion = {
@@ -139,14 +140,22 @@ You chose ${formatToBump(bump)} instead.`);
 
     // Execute the tests
     console.log('Running the tests');
-    log(yield execNpm('run test'));
+    yield execNpm('run test');
 
     // Bump version
     console.log('Bumping version');
-    log(yield execNpm('version ' + bump));
+    const newVersion = bumpVersion[bump];
+    let packData = yield fs.readFile(packgeJSONPath, 'utf8');
+    packData = packData.replace(/"version": "[^"]+"/, `"version": "${newVersion}"`);
+    yield fs.writeFile(packgeJSONPath, packData);
 
     // Add/update changelog
     yield updateHistory();
+
+    // Commit the update and tag it
+    yield child_process.exec('git add package.json History.md');
+    yield child_process.exec(`git commit -m ${newVersion}`);
+    yield child_process.exec(`git tag -a v${newVersion} -m v${newVersion}`);
 
     // Publish package
     console.log('Publishing package');
@@ -177,7 +186,7 @@ You chose ${formatToBump(bump)} instead.`);
 });
 
 function execNpm(command) {
-    return child_process.exec('npm ' + command);
+    return child_process.exec(`npm ${command}`);
 }
 
 function parseName(name) {
@@ -211,7 +220,8 @@ function getRecommendedBump() {
 function *updateHistory() {
     const HISTORY_FILE = 'History.md';
     const changelogOptions = {
-        preset: 'angular'
+        preset: 'angular',
+        releaseCount: 1
     };
     if (yield fs.exists(HISTORY_FILE)) { // File exists. Append latest version to current history.
         const newHistory = yield createChangelog(changelogOptions);
