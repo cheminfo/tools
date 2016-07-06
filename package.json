@@ -46,6 +46,6 @@
     "request-promise": "^3.0.0",
     "semver": "^5.2.0",
     "webpack": "^1.13.0",
-    "yeoman-environment": "^1.6.1"
+    "yeoman-environment": "^1.6.2"
   }
 }
