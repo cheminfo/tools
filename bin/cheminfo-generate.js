@@ -15,12 +15,21 @@ program.arguments('<org>').action(function (_org) {
 program.parse(process.argv);
 if (!org) program.missingArgument('org');
 
-if (org === 'ml') {
-    env.register(require.resolve('generator-mljs-packages'), 'mljs-packages:app');
-    env.run('mljs-packages:app', function (err) {
-        if (err) console.error(err);
-    });
-}
-else {
-    console.error('unsupported organization')
+switch(org) {
+    case 'ml':
+        env.register(require.resolve('generator-mljs-packages'), 'mljs-packages:app');
+        env.run('mljs-packages:app', function (err) {
+            if (err) console.error(err);
+        });
+        break;
+
+    case 'cheminfo':
+        env.register(require.resolve('generator-cheminfo-js'), 'cheminfo-js:app');
+        env.run('cheminfo-js:app', function (err) {
+            if (err) console.error(err);
+        });
+        break;
+
+    default:
+        console.error('unsupported organization');
 }
