@@ -47,8 +47,7 @@ This will:
 
 ### generate
 
-Generates a basic project structure based in the giving organization (see [generator-mljs-packages](https://github.com/mljs/generator-mljs-packages)).
-You need to run the command from the root of the project's directory.
+Generates a basic project structure based on the giving organization. You need to run the command from the root of the project's directory (previously you had to create it and clone it).
 
 Usage: `cheminfo generate <org>`
 
@@ -64,22 +63,9 @@ The generator will prompt for the next fields:
   * __Your package version__: The package version. The default value is `0.0.1`
   * __Run NPM install?__: Run `npm install` after the template generation
 
-When the generator finish there will be the following files:
-
-```
-.
-├── .eslintrc.yml
-├── .gitignore
-├── .travis.yml
-├── History.md
-├── LICENSE
-├── README.md
-├── package.json
-├── src
-│   └── index.js
-└── test
-    └── test.js
-```
+The supported organizations and generators are:
+  * [ml](https://github.com/mljs/generator-mljs-packages)
+  * [cheminfo](https://github.com/mljs/generator-cheminfo-js)
 
 ## License
 
