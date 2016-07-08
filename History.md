@@ -1,3 +1,13 @@
+<a name="1.5.1"></a>
+## [1.5.1](https://github.com/cheminfo/tools/compare/v1.5.0...v1.5.1) (2016-07-08)
+
+
+### Bug Fixes
+
+* **publish:** use correct path to exec documentation ([f788b7b](https://github.com/cheminfo/tools/commit/f788b7b))
+
+
+
 <a name="1.5.0"></a>
 # [1.5.0](https://github.com/cheminfo/tools/compare/v1.4.1...v1.5.0) (2016-07-08)
 
