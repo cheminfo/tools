@@ -263,7 +263,8 @@ function *generateDoc() {
         })).c;
     }
     if (wantsDoc) {
-        yield child_process.exec('documentation build --github --output doc --format html');
+        const documentationExecPath = path.resolve(__dirname, '../node_modules/.bin/documentation');
+        yield child_process.exec(`${documentationExecPath} build --github --output doc --format html`);
         yield child_process.exec('git add doc');
         yield child_process.exec('git commit -m "doc: rebuild doc"');
         yield child_process.exec('git push origin master');
