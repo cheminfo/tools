@@ -1,3 +1,14 @@
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/cheminfo/tools/compare/v1.4.1...v1.5.0) (2016-07-08)
+
+
+### Features
+
+* **generate:** add cheminfo-js generator ([1f40f59](https://github.com/cheminfo/tools/commit/1f40f59))
+* **generate:** choose organization if not declared ([0cf8937](https://github.com/cheminfo/tools/commit/0cf8937))
+
+
+
 <a name="1.4.1"></a>
 ## [1.4.1](https://github.com/cheminfo/tools/compare/v1.4.0...v1.4.1) (2016-07-05)
 
