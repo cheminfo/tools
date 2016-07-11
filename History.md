@@ -1,3 +1,19 @@
+<a name="1.6.0"></a>
+# [1.6.0](https://github.com/cheminfo/tools/compare/v1.5.1...v1.6.0) (2016-07-11)
+
+
+### Bug Fixes
+
+* **doc:** use promisified node API ([ee43a72](https://github.com/cheminfo/tools/commit/ee43a72))
+
+
+### Features
+
+* add doc command ([e65144c](https://github.com/cheminfo/tools/commit/e65144c))
+* **generate:** add clone url option ([3260261](https://github.com/cheminfo/tools/commit/3260261))
+
+
+
 <a name="1.5.1"></a>
 ## [1.5.1](https://github.com/cheminfo/tools/compare/v1.5.0...v1.5.1) (2016-07-08)
 
