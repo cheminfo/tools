@@ -1,3 +1,13 @@
+<a name="1.7.0"></a>
+# [1.7.0](https://github.com/cheminfo/tools/compare/v1.6.0...v1.7.0) (2016-07-11)
+
+
+### Features
+
+* **generate:** rename cheminfo org to cheminfo-js ([90c5f1e](https://github.com/cheminfo/tools/commit/90c5f1e))
+
+
+
 <a name="1.6.0"></a>
 # [1.6.0](https://github.com/cheminfo/tools/compare/v1.5.1...v1.6.0) (2016-07-11)
 
