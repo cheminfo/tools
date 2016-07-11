@@ -60,6 +60,10 @@ Generates a basic project structure based on the giving organization. You need t
 
 Usage: `cheminfo generate <org>`
 
+The supported organizations and generators are:
+  * [ml](https://github.com/mljs/generator-mljs-packages)
+  * [cheminfo](https://github.com/mljs/generator-cheminfo-js)
+
 #### Example
 
 `cheminfo generate ml`
@@ -71,10 +75,6 @@ The generator will prompt for the next fields:
   * __Your package description__: A description to show in [NPM](https://docs.npmjs.com/files/package.json#description-1)
   * __Your package version__: The package version. The default value is `0.0.1`
   * __Run NPM install?__: Run `npm install` after the template generation
-
-The supported organizations and generators are:
-  * [ml](https://github.com/mljs/generator-mljs-packages)
-  * [cheminfo](https://github.com/mljs/generator-cheminfo-js)
 
 ## License
 
