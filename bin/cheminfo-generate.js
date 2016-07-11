@@ -3,20 +3,34 @@
 'use strict';
 
 const program = require('commander');
-const yeoman = require('yeoman-environment');
-const inquirer = require('inquirer');
+const child_process = require('mz/child_process');
 const co = require('co');
+const inquirer = require('inquirer');
+const yeoman = require('yeoman-environment');
 
 let org;
-let env = yeoman.createEnv();
 
-program.arguments('<org>').action(function (_org) {
+program
+    .option('-u, --url <url>', 'git clone URL')
+    .arguments('<org>').action(function (_org) {
     org = _org;
 });
 
 program.parse(process.argv);
 
+const repoNameReg = /\/([^\/]+)\.git$/i;
+
 co(function *() {
+    if (program.url) {
+        const res = repoNameReg.exec(program.url);
+        console.log(`Cloning into ${res[1]}`);
+        if (!res) {
+            console.error('Not a correct git URL: ' + program.url);
+            return;
+        }
+        yield child_process.execFile('git', ['clone', program.url]);
+        process.chdir(res[1]);
+    }
     if (!org)
         org = (yield inquirer.prompt({
             type: 'list',
@@ -26,6 +40,7 @@ co(function *() {
             default: 'ml'
         })).org;
 
+    const env = yeoman.createEnv();
     switch (org) {
         case 'ml':
             env.register(require.resolve('generator-mljs-packages'), 'mljs-packages:app');

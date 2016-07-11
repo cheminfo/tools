@@ -58,11 +58,15 @@ This will:
 
 Generates a basic project structure based on the giving organization. You need to run the command from the root of the project's directory (previously you had to create it and clone it).
 
-Usage: `cheminfo generate <org>`
+Usage: `cheminfo generate <org> [options]`
 
 The supported organizations and generators are:
   * [ml](https://github.com/mljs/generator-mljs-packages)
   * [cheminfo](https://github.com/mljs/generator-cheminfo-js)
+
+#### Options
+
+* **-u, --url**: git url to clone an existing repository
 
 #### Example
 
