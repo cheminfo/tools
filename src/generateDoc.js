@@ -1,7 +1,7 @@
 'use strict';
 
-const child_process = require('child_process');
-const fs = require('fs');
+const child_process = require('mz/child_process');
+const fs = require('mz/fs');
 const inquirer = require('inquirer');
 const path = require('path');
 
