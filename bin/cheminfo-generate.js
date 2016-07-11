@@ -36,7 +36,7 @@ co(function *() {
             type: 'list',
             message: 'Choose an organization',
             name: 'org',
-            choices: ['ml', 'cheminfo'],
+            choices: ['ml', 'cheminfo-js'],
             default: 'ml'
         })).org;
 
@@ -49,7 +49,7 @@ co(function *() {
             });
             break;
 
-        case 'cheminfo':
+        case 'cheminfo-js':
             env.register(require.resolve('generator-cheminfo-js'), 'cheminfo-js:app');
             env.run('cheminfo-js:app', function (err) {
                 if (err) console.error(err);
