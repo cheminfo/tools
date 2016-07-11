@@ -25,6 +25,15 @@ Make a browser build using webpack
 * **-u, --no-uglify**: disable generation of min file and source map
 * **-v, --verbose**: output warnings if any
 
+### doc
+
+Generate and/or publish documentation.  
+It will be generated in the `doc` directory.
+
+#### options
+
+* **-p, --publish**: publish the generated doc to gh-pages
+
 ### publish
 
 Test, bump and publish a project on npm.  

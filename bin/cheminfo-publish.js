@@ -15,6 +15,7 @@ const recommendedBump = require('conventional-recommended-bump');
 const request = require('request-promise');
 const semver = require('semver');
 
+const generateDoc = require('../src/generateDoc');
 const util = require('../src/util');
 
 let version, org;
@@ -179,7 +180,9 @@ You chose ${formatToBump(bump)} instead.`);
     }
 
     // Documentation
-    yield generateDoc();
+    if (program.doc) {
+        yield generateDoc(true);
+    }
 
 }).catch(function (err) {
     console.error(err);
@@ -246,28 +249,4 @@ function createChangelog(options) {
         changelogStream.on('error', reject);
         changelogStream.pipe(concatStream);
     });
-}
-
-function *generateDoc() {
-    if (!program.doc) return;
-
-    const hasDoc = yield fs.exists('doc');
-    let wantsDoc = true;
-    if (!hasDoc) {
-        console.log('This project has no doc folder');
-        wantsDoc = (yield inquirer.prompt({
-            type: 'confirm',
-            name: 'c',
-            message: 'Do you want to create it',
-            default: true
-        })).c;
-    }
-    if (wantsDoc) {
-        const documentationExecPath = path.resolve(__dirname, '../node_modules/.bin/documentation');
-        yield child_process.exec(`${documentationExecPath} build --github --output doc --format html`);
-        yield child_process.exec('git add doc');
-        yield child_process.exec('git commit -m "doc: rebuild doc"');
-        yield child_process.exec('git push origin master');
-        yield child_process.exec('git subtree push --prefix doc origin gh-pages');
-    }
 }
