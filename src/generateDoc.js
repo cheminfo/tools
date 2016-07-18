@@ -14,7 +14,7 @@ module.exports = function *generateDoc(publish) {
             type: 'confirm',
             name: 'c',
             message: 'Do you want to create it',
-            default: true
+            default: false
         })).c;
     }
     if (wantsDoc) {
