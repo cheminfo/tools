@@ -1,3 +1,13 @@
+<a name="1.8.2"></a>
+## [1.8.2](https://github.com/cheminfo/tools/compare/v1.8.1...v1.8.2) (2016-07-18)
+
+
+### Bug Fixes
+
+* update ml package generator ([336c749](https://github.com/cheminfo/tools/commit/336c749))
+
+
+
 <a name="1.8.1"></a>
 ## [1.8.1](https://github.com/cheminfo/tools/compare/v1.8.0...v1.8.1) (2016-07-18)
 
