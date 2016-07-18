@@ -1,3 +1,13 @@
+<a name="1.8.0"></a>
+# [1.8.0](https://github.com/cheminfo/tools/compare/v1.7.0...v1.8.0) (2016-07-18)
+
+
+### Features
+
+* default choice for doc generation is false ([8f49891](https://github.com/cheminfo/tools/commit/8f49891))
+
+
+
 <a name="1.7.0"></a>
 # [1.7.0](https://github.com/cheminfo/tools/compare/v1.6.0...v1.7.0) (2016-07-11)
 
