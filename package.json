@@ -36,7 +36,7 @@
     "concat-stream": "^1.5.1",
     "conventional-changelog": "^1.1.0",
     "conventional-recommended-bump": "^0.2.1",
-    "documentation": "^4.0.0-beta5",
+    "documentation": "^4.0.0-beta9",
     "generator-cheminfo-js": "^1.1.1",
     "generator-mljs-packages": "^1.4.0",
     "ggit": "^1.10.0",
