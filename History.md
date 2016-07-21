@@ -1,3 +1,13 @@
+<a name="1.8.3"></a>
+## [1.8.3](https://github.com/cheminfo/tools/compare/v1.8.2...v1.8.3) (2016-07-21)
+
+
+### Bug Fixes
+
+* update documentationjs ([6858f0b](https://github.com/cheminfo/tools/commit/6858f0b))
+
+
+
 <a name="1.8.2"></a>
 ## [1.8.2](https://github.com/cheminfo/tools/compare/v1.8.1...v1.8.2) (2016-07-18)
 
