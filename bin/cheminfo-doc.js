@@ -22,18 +22,6 @@ co(function *(){
     const shouldStop = yield util.checkLatestVersion(force);
     if (shouldStop) return;
 
-    const currentBranch = yield git.branchName();
-    if (currentBranch !== 'master') {
-        console.error(`You must be on master branch. Current branch: ${currentBranch}`);
-        return;
-    }
-
-    const hasChanges = yield git.hasChanges();
-    if (hasChanges) {
-        console.error(`You have uncommitted changes.`);
-        return;
-    }
-
     yield generateDoc(program.publish);
 
 }).catch(function (err) {
