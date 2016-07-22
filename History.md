@@ -1,3 +1,8 @@
+<a name="1.8.4"></a>
+## [1.8.4](https://github.com/cheminfo/tools/compare/v1.8.3...v1.8.4) (2016-07-22)
+
+
+
 <a name="1.8.3"></a>
 ## [1.8.3](https://github.com/cheminfo/tools/compare/v1.8.2...v1.8.3) (2016-07-21)
 
