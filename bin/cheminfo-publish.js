@@ -52,7 +52,7 @@ co(function *(){
 
     // Get admin list for org
     const adminInfo = yield request('https://www.cheminfo.org/_tools/admin.json', {json: true});
-    const orgs = Object.keys(adminInfo).filter(org => adminInfo[org].includes(name));
+    const orgs = Object.keys(adminInfo).filter(org => adminInfo[org].indexOf(name) !== -1);
 
     if (orgs.length === 0) {
         console.error('Found no org with publish rights');
@@ -69,7 +69,7 @@ co(function *(){
         })).org;
     }
 
-    if (!orgs.includes(org)) {
+    if (orgs.indexOf(org) === -1) {
         console.error(`Org (${org}) does not exist or you (${name}) are not allowed to publish in it`);
         return;
     }
