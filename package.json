@@ -39,7 +39,7 @@
     "documentation": "^4.0.0-beta9",
     "generator-cheminfo-js": "^1.1.1",
     "generator-mljs-packages": "^1.4.1",
-    "ggit": "^1.10.0",
+    "ggit": "^1.11.0",
     "inquirer": "^1.1.0",
     "json-loader": "^0.5.4",
     "latest-version": "^2.0.0",
