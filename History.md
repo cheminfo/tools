@@ -1,3 +1,13 @@
+<a name="1.8.5"></a>
+## [1.8.5](https://github.com/cheminfo/tools/compare/v1.8.4...v1.8.5) (2016-07-29)
+
+
+### Bug Fixes
+
+* **publish:** change includes by indexOf ([#130](https://github.com/cheminfo/tools/issues/130)) ([aff80f9](https://github.com/cheminfo/tools/commit/aff80f9))
+
+
+
 <a name="1.8.4"></a>
 ## [1.8.4](https://github.com/cheminfo/tools/compare/v1.8.3...v1.8.4) (2016-07-22)
 
