@@ -115,7 +115,7 @@ You can ask one of the current owners for permission: ${owners}`);
     console.log(`Current version: ${packageVersion}`);
     if (!bump) {
         console.log(`${toBump.reason}`);
-        console.log(`Recommended bump: ${formatToBump(toBump.releaseAs)}`);
+        console.log(`Recommended bump: ${formatToBump(toBump.releaseType)}`);
         bump = (yield inquirer.prompt({
             type: 'list',
             name: 'bump',
@@ -125,10 +125,10 @@ You can ask one of the current owners for permission: ${owners}`);
                 {name: formatToBump('minor'), value: 'minor'},
                 {name: formatToBump('patch'), value: 'patch'}
             ],
-            default: toBump.releaseAs
+            default: toBump.releaseType
         })).bump;
-    } else if (bump !== toBump.releaseAs) {
-        console.log(`Recommended bump is ${formatToBump(toBump.releaseAs)}.
+    } else if (bump !== toBump.releaseType) {
+        console.log(`Recommended bump is ${formatToBump(toBump.releaseType)}.
 You chose ${formatToBump(bump)} instead.`);
         const confirm = (yield inquirer.prompt({
             type: 'confirm',
