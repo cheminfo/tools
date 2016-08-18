@@ -4,7 +4,6 @@
 
 const program = require('commander');
 const co = require('co');
-const git = require('ggit');
 
 const generateDoc = require('../src/generateDoc');
 const util = require('../src/util');

@@ -6,10 +6,10 @@ const inquirer = require('inquirer');
 const path = require('path');
 
 module.exports = function *generateDoc(publish) {
-    const hasDoc = yield fs.exists('doc');
+    const hasDoc = yield fs.exists('docs');
     let wantsDoc = true;
     if (!hasDoc) {
-        console.log('This project has no doc folder');
+        console.log('This project has no docs folder');
         wantsDoc = (yield inquirer.prompt({
             type: 'confirm',
             name: 'c',
@@ -19,12 +19,11 @@ module.exports = function *generateDoc(publish) {
     }
     if (wantsDoc) {
         const documentationExecPath = path.resolve(__dirname, '../node_modules/.bin/documentation');
-        yield child_process.exec(`${documentationExecPath} build --github --output doc --format html`);
+        yield child_process.exec(`${documentationExecPath} build --github --output docs --format html`);
         if (publish) {
-            yield child_process.exec('git add doc');
-            yield child_process.exec('git commit -m "doc: rebuild doc"');
+            yield child_process.exec('git add docs');
+            yield child_process.exec('git commit -m "doc: rebuild docs"');
             yield child_process.exec('git push origin master');
-            yield child_process.exec('git subtree push --prefix doc origin gh-pages');
         }
     }
 };
