@@ -1,3 +1,13 @@
+<a name="1.9.0"></a>
+# [1.9.0](https://github.com/cheminfo/tools/compare/v1.8.6...v1.9.0) (2016-08-18)
+
+
+### Features
+
+* **doc:** don't use gh-pages ([b6b3d2c](https://github.com/cheminfo/tools/commit/b6b3d2c))
+
+
+
 <a name="1.8.6"></a>
 ## [1.8.6](https://github.com/cheminfo/tools/compare/v1.8.5...v1.8.6) (2016-08-02)
 
