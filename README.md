@@ -62,7 +62,7 @@ Usage: `cheminfo generate <org> [options]`
 
 The supported organizations and generators are:
   * [ml](https://github.com/mljs/generator-mljs-packages)
-  * [cheminfo](https://github.com/mljs/generator-cheminfo-js)
+  * [cheminfo](https://github.com/cheminfo-js/generator-cheminfo-js)
 
 #### Options
 

@@ -21,16 +21,19 @@ program.parse(process.argv);
 const repoNameReg = /\/([^\/]+)\.git$/i;
 
 co(function *() {
+    // git clone url
     if (program.url) {
-        const res = repoNameReg.exec(program.url);
-        console.log(`Cloning into ${res[1]}`);
+        const res = repoNameReg.exec(program.url)[1];
+        console.log(`Cloning into ${res}`);
         if (!res) {
             console.error('Not a correct git URL: ' + program.url);
             return;
         }
         yield child_process.execFile('git', ['clone', program.url]);
-        process.chdir(res[1]);
+        process.chdir(res);
     }
+
+    // Choose org
     if (!org)
         org = (yield inquirer.prompt({
             type: 'list',
@@ -40,6 +43,7 @@ co(function *() {
             default: 'ml'
         })).org;
 
+    // Yeoman generators
     const env = yeoman.createEnv();
     switch (org) {
         case 'ml':
@@ -58,6 +62,7 @@ co(function *() {
 
         default:
             console.error('unsupported organization');
+            return;
     }
 }).catch(function (err) {
     console.error(err);
