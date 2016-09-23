@@ -88,9 +88,8 @@ function doMinify() {
     webpackConfig.devtool = 'source-map';
     webpackConfig.output.devtoolModuleFilenameTemplate = 'webpack:///' + (pkg.name || '') + '/[resource-path]';
     webpackConfig.output.filename = filename + '.min.js';
-    webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({
-        minify: true
-    }));
+    var Babili = require('babili-webpack-plugin');
+    webpackConfig.plugins.push(new Babili());
     webpack(webpackConfig, function (err, stats) {
         var jsonStats = stats.toJson();
         if (err) {
