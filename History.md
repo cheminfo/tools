@@ -1,3 +1,13 @@
+<a name="1.10.0"></a>
+# [1.10.0](https://github.com/cheminfo/tools/compare/v1.9.0...v1.10.0) (2016-09-23)
+
+
+### Features
+
+* use babili for minification ([dd2d5d0](https://github.com/cheminfo/tools/commit/dd2d5d0))
+
+
+
 <a name="1.9.0"></a>
 # [1.9.0](https://github.com/cheminfo/tools/compare/v1.8.6...v1.9.0) (2016-08-18)
 
