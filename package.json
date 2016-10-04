@@ -39,7 +39,7 @@
     "conventional-recommended-bump": "^0.3.0",
     "documentation": "4.0.0-beta10",
     "generator-cheminfo-js": "^1.1.2",
-    "generator-mljs-packages": "^1.9.2",
+    "generator-mljs-packages": "^1.9.3",
     "ggit": "^1.11.0",
     "inquirer": "^1.2.1",
     "json-loader": "^0.5.4",
