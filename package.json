@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"OK\"",
-    "install": "tabtab install --auto"
+    "install": "tabtab install --name cheminfo --auto"
   },
   "bin": {
     "cheminfo": "./bin/cheminfo.js"
