@@ -19,7 +19,7 @@ module.exports = function *generateDoc(publish) {
     }
     if (wantsDoc) {
         const documentationExecPath = path.resolve(__dirname, '../node_modules/.bin/documentation');
-        yield child_process.exec(`${documentationExecPath} build --github --output docs --format html`);
+        yield child_process.exec(`${documentationExecPath} build --github --output docs --format html --sort-order alpha`);
         if (publish) {
             yield child_process.exec('git add docs');
             yield child_process.exec('git commit -m "doc: rebuild docs"');
