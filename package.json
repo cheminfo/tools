@@ -31,7 +31,7 @@
     "cheminfo": ["build", "doc", "publish", "generate"]
   },
   "dependencies": {
-    "babel-core": "^6.8.0",
+    "babel-core": "^6.18.1",
     "babel-loader": "^6.2.7",
     "babel-preset-es2015": "^6.6.0",
     "babili-webpack-plugin": "0.0.6",
