@@ -58,11 +58,7 @@ This will:
 
 Generates a basic project structure based on the giving organization. You need to run the command from the root of the project's directory (previously you had to create it and clone it).
 
-Usage: `cheminfo generate <org> [options]`
-
-The supported organizations and generators are:
-  * [ml](https://github.com/mljs/generator-mljs-packages)
-  * [cheminfo-js](https://github.com/cheminfo-js/generator-cheminfo-js)
+Usage: `cheminfo generate [options]`
 
 #### Options
 
@@ -74,11 +70,34 @@ The supported organizations and generators are:
 
 The generator will prompt for the next fields:
 
-  * __Your project name__: the package name, without the `ml-` start
+  * __Your project name__: the package name, without the `ml-` start for ml.js organization
+  * __Organization__: choose the desired organization, the supported ones are __ml__ and __cheminfo-js__
   * __Your name__: your [NPM name](https://docs.npmjs.com/files/package.json#people-fields-author-contributors)
+  * __Your email__: your email
   * __Your package description__: A description to show in [NPM](https://docs.npmjs.com/files/package.json#description-1)
   * __Your package version__: The package version. The default value is `0.0.1`
+  * __Do you want to install coverage tool?__: Add the coveralls badge and scripts. The default value is `false`
+  * __Do you want to create a Runkit file example?__: Add the example displayed in NPM. The default value is `false`
   * __Run NPM install?__: Run `npm install` after the template generation
+
+When the generator finish there will be the following files:
+
+```
+.
+├── .eslintrc.yml
+├── .gitignore
+├── .travis.yml
+├── History.md
+├── LICENSE
+├── README.md
+├── package.json
+├── runkit.js
+├── src
+│   └── index.js
+└── test
+    ├── .eslintrc.yml
+    └── test.js
+```
 
 ## License
 
