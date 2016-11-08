@@ -42,7 +42,7 @@
     "conventional-changelog": "^1.1.0",
     "conventional-recommended-bump": "^0.3.0",
     "documentation": "4.0.0-beta11",
-    "generator-cheminfo-js": "^1.1.2",
+    "generator-cheminfo-js": "^1.1.3",
     "generator-mljs-packages": "^1.9.3",
     "ggit": "^1.11.1",
     "inquirer": "^1.2.2",
