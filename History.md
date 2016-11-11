@@ -1,3 +1,18 @@
+<a name="1.11.0"></a>
+# [1.11.0](https://github.com/cheminfo/tools/compare/v1.10.1...v1.11.0) (2016-11-11)
+
+
+### Bug Fixes
+
+* update documentation.js and sort docs alphabetically ([f166203](https://github.com/cheminfo/tools/commit/f166203))
+
+
+### Features
+
+* tab autocompletion ([992f3b8](https://github.com/cheminfo/tools/commit/992f3b8)), closes [#170](https://github.com/cheminfo/tools/issues/170)
+
+
+
 <a name="1.10.1"></a>
 ## [1.10.1](https://github.com/cheminfo/tools/compare/v1.10.0...v1.10.1) (2016-09-29)
 
