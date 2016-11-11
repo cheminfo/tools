@@ -28,12 +28,19 @@
   },
   "homepage": "https://github.com/cheminfo/tools",
   "tabtab": {
-    "cheminfo": ["build", "doc", "publish", "generate"]
+    "cheminfo": [
+      "build",
+      "doc",
+      "publish",
+      "generate"
+    ]
   },
   "dependencies": {
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.7",
     "babel-preset-es2015": "^6.18.0",
+    "babel-preset-es2016": "^6.16.0",
+    "babel-preset-es2017": "^6.16.0",
     "babili-webpack-plugin": "0.0.7",
     "chalk": "^1.1.3",
     "co": "^4.6.0",

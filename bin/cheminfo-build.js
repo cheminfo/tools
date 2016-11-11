@@ -61,7 +61,7 @@ if (program.babel) {
         exclude: /node_modules/,
         loader: path.dirname(require.resolve('babel-loader')),
         query: {
-            presets: ['es2015']
+            presets: ['es2015', 'es2016', 'es2017']
         }
     };
     webpackConfig.module.loaders.push(babelConfig);
