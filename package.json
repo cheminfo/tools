@@ -41,7 +41,7 @@
     "concat-stream": "^1.5.2",
     "conventional-changelog": "^1.1.0",
     "conventional-recommended-bump": "^0.3.0",
-    "documentation": "4.0.0-beta11",
+    "documentation": "4.0.0-beta13",
     "generator-cheminfo": "^1.0.1",
     "ggit": "^1.11.1",
     "inquirer": "^1.2.2",
