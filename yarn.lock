@@ -386,7 +386,7 @@ babel-helpers@^6.16.0:
     babel-runtime "^6.0.0"
     babel-template "^6.16.0"
 
-babel-loader@^6.2.7:
+babel-loader@^6.2.8:
   version "6.2.10"
   resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-6.2.10.tgz#adefc2b242320cd5d15e65b31cea0e8b1b02d4b0"
   dependencies:
@@ -4200,7 +4200,7 @@ request-promise@^4.0.1:
     request-promise-core "1.1.1"
     stealthy-require "^1.0.0"
 
-request@^2.78.0, request@^2.79.0:
+request@^2.79.0:
   version "2.79.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.79.0.tgz#4dfe5bf6be8b8cdc37fcf93e04b65577722710de"
   dependencies:
@@ -5208,7 +5208,7 @@ yeoman-assert@^2.0.0:
     lodash "^3.6.0"
     path-exists "^2.1.0"
 
-yeoman-environment@^1.1.0, yeoman-environment@^1.5.2, yeoman-environment@^1.6.5:
+yeoman-environment@^1.1.0, yeoman-environment@^1.5.2, yeoman-environment@^1.6.6:
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/yeoman-environment/-/yeoman-environment-1.6.6.tgz#cd85fa67d156060e440d7807d7ef7cf0d2d1d671"
   dependencies:
