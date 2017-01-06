@@ -59,7 +59,13 @@ co(function *(){
         return;
     }
 
+    const packgeJSONPath = path.resolve('package.json');
+    const packageJSON = require(packgeJSONPath);
+
     let org = program.org;
+    if (!org) {
+        org = util.getOrgFromPackage(packageJSON);
+    }
     if (!org) {
         org = (yield inquirer.prompt({
             type: 'list',
@@ -77,8 +83,6 @@ co(function *(){
     var adminList = adminInfo[org];
 
     // Get the name of the package
-    const packgeJSONPath = path.resolve('package.json');
-    const packageJSON = require(packgeJSONPath);
     const packageName = packageJSON.name;
     const packageVersion = packageJSON.version;
     const bumpVersion = {
