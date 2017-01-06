@@ -1,3 +1,13 @@
+<a name="1.12.0"></a>
+# [1.12.0](https://github.com/cheminfo/tools/compare/v1.11.0...v1.12.0) (2017-01-06)
+
+
+### Features
+
+* auto-select organization by reading package.json ([ab5c8aa](https://github.com/cheminfo/tools/commit/ab5c8aa))
+
+
+
 <a name="1.11.0"></a>
 # [1.11.0](https://github.com/cheminfo/tools/compare/v1.10.1...v1.11.0) (2016-11-11)
 
