@@ -1,7 +1,6 @@
 'use strict';
 
 const should = require('should');
-
 const util = require('../../src/util');
 
 describe('util', function () {
@@ -17,10 +16,10 @@ describe('util', function () {
                 repository: 'org/repo'
             }).should.equal('org');
         });
-        it('bugs', function () {
+        it('repository git url', function () {
             getOrgFromPackage({
-                bugs: {url: 'https://github.com/org/repo/issues'}
-            }).should.equal('org');
+                repository: 'git@github.com:cheminfo/rest-on-couch-client.git'
+            }).should.equal('cheminfo');
         });
         it('homepage', function () {
             getOrgFromPackage({
