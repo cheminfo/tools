@@ -1,3 +1,13 @@
+<a name="1.13.0"></a>
+# [1.13.0](https://github.com/cheminfo/tools/compare/v1.12.0...v1.13.0) (2017-01-13)
+
+
+### Bug Fixes
+
+* parse org of ssh git urls ([8ff92d8](https://github.com/cheminfo/tools/commit/8ff92d8))
+
+
+
 <a name="1.12.0"></a>
 # [1.12.0](https://github.com/cheminfo/tools/compare/v1.11.0...v1.12.0) (2017-01-06)
 
