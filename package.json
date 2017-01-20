@@ -49,7 +49,7 @@
     "concat-stream": "^1.5.2",
     "conventional-changelog": "^1.1.0",
     "conventional-recommended-bump": "^0.3.0",
-    "documentation": "4.0.0-beta13",
+    "documentation": "^4.0.0-beta.18",
     "generator-cheminfo": "^2.1.0",
     "ggit": "^1.11.1",
     "inquirer": "^2.0.0",
