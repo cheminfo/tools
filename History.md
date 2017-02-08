@@ -1,3 +1,13 @@
+<a name="1.14.0"></a>
+# [1.14.0](https://github.com/cheminfo/tools/compare/v1.13.0...v1.14.0) (2017-02-08)
+
+
+### Features
+
+* update dependencies and change config to Webpack 2. Use babel-preset-env. ([e84549b](https://github.com/cheminfo/tools/commit/e84549b))
+
+
+
 <a name="1.13.0"></a>
 # [1.13.0](https://github.com/cheminfo/tools/compare/v1.12.0...v1.13.0) (2017-01-13)
 
