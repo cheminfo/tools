@@ -59,8 +59,11 @@ if (program.babel) {
             presets: [
                 ['env', {
                 targets: {
-                    chrome: 54,
-                    browsers: 'last 2 versions'
+                    browsers: [
+                        'chrome >= 54',
+                        'last 2 edge versions',
+                        'last 1 safari version'
+                    ]
                 }
                 }]
             ]
