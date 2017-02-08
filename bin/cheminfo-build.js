@@ -37,17 +37,12 @@ var filename = program.outName || pkg.name || 'bundle';
 
 var webpackConfig = {
     context: cwd,
-    entry: path.join(cwd, entryPoint),
+    entry: path.resolve(cwd, entryPoint),
     module: {
-        loaders: [
-            {
-                test: /.json$/,
-                loader: path.dirname(require.resolve('json-loader'))
-            }
-        ]
+        rules: []
     },
     output: {
-        path: path.join(cwd, program.out),
+        path: path.resolve(cwd, program.out),
         filename: filename + '.js',
         library: name,
         libraryTarget: 'umd'
@@ -59,12 +54,19 @@ if (program.babel) {
     var babelConfig = {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: path.dirname(require.resolve('babel-loader')),
-        query: {
-            presets: ['es2015', 'es2016', 'es2017']
+        loader: 'babel-loader',
+        options: {
+            presets: [
+                ['env', {
+                targets: {
+                    chrome: 54,
+                    browsers: 'last 2 versions'
+                }
+                }]
+            ]
         }
     };
-    webpackConfig.module.loaders.push(babelConfig);
+    webpackConfig.module.rules.push(babelConfig);
 }
 
 webpack(webpackConfig, function (err, stats) {

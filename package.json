@@ -39,10 +39,8 @@
   "dependencies": {
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.8",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-es2016": "^6.16.0",
-    "babel-preset-es2017": "^6.16.0",
-    "babili-webpack-plugin": "0.0.7",
+    "babel-preset-env": "^1.1.8",
+    "babili-webpack-plugin": "^0.0.9",
     "chalk": "^1.1.3",
     "co": "^4.6.0",
     "commander": "^2.9.0",
@@ -53,7 +51,6 @@
     "generator-cheminfo": "^2.1.0",
     "ggit": "^1.11.1",
     "inquirer": "^2.0.0",
-    "json-loader": "^0.5.4",
     "latest-version": "^2.0.0",
     "mz": "^2.5.0",
     "parse-github-repo-url": "^1.3.0",
@@ -61,7 +58,7 @@
     "request-promise": "^4.0.1",
     "semver": "^5.3.0",
     "tabtab": "^2.2.1",
-    "webpack": "^1.13.3",
+    "webpack": "^2.2.1",
     "yeoman-environment": "^1.6.6"
   },
   "devDependencies": {
