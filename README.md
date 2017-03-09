@@ -41,6 +41,8 @@ You need to run the command from the root of the project's directory. It is __on
 
 Usage: `cheminfo publish -o <org> -b <version>`
 
+`-o` and `-b` are optional values and are determined automaticaly.
+
 #### Example
 
 `cheminfo publish -o cheminfo -b major`
