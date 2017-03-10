@@ -13,7 +13,7 @@ program
     .option('-n, --out-name [name]', 'Name of the output file')
     .option('-r, --root [rootname]', 'Root name of the library')
     .option('-e, --entry [file]', 'Library entry point')
-    .option('-b, --babel', 'Enable babel loader for ES6 features')
+    .option('-b, --babel', 'Enable babel loader for ES6 features (deprecated - always on)')
     .option('-u, --no-uglify', 'Disable generation of min file with source map')
     .option('-v, --verbose', 'Output warnings if any');
 
@@ -51,13 +51,16 @@ var webpackConfig = {
 };
 
 if (program.babel) {
-    var babelConfig = {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: {
-            presets: [
-                ['env', {
+    process.emitWarning('The --babel option is now always enabled and targets the latest browsers using babel-preset-env', 'DeprecationWarning');
+}
+
+var babelConfig = {
+    test: /\.js$/,
+    exclude: /node_modules/,
+    loader: 'babel-loader',
+    options: {
+        presets: [
+            ['env', {
                 targets: {
                     browsers: [
                         'chrome >= 54',
@@ -65,12 +68,11 @@ if (program.babel) {
                         'last 1 safari version'
                     ]
                 }
-                }]
-            ]
-        }
-    };
-    webpackConfig.module.rules.push(babelConfig);
-}
+            }]
+        ]
+    }
+};
+webpackConfig.module.rules.push(babelConfig);
 
 webpack(webpackConfig, function (err, stats) {
     var jsonStats = stats.toJson();
