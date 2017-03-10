@@ -1,3 +1,13 @@
+<a name="1.15.0"></a>
+# [1.15.0](https://github.com/cheminfo/tools/compare/v1.14.1...v1.15.0) (2017-03-10)
+
+
+### Features
+
+* always enable babel-preset-env and deprecate --babel option ([ec318e8](https://github.com/cheminfo/tools/commit/ec318e8))
+
+
+
 <a name="1.14.1"></a>
 ## [1.14.1](https://github.com/cheminfo/tools/compare/v1.14.0...v1.14.1) (2017-02-08)
 
