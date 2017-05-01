@@ -22,7 +22,7 @@ module.exports = function *generateDoc(publish) {
         yield child_process.exec(`${documentationExecPath} build --github --output docs --format html --sort-order alpha`);
         if (publish) {
             yield child_process.exec('git add docs');
-            yield child_process.exec('git commit -m "doc: rebuild docs"');
+            yield child_process.exec('git commit -m "doc: rebuild docs [ci skip]"');
             yield child_process.exec('git push origin master');
         }
     }
