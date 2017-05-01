@@ -164,7 +164,16 @@ You chose ${formatToBump(bump)} instead.`);
 
     // Publish package
     console.log('Publishing package');
-    log(yield execNpm('publish'));
+    var publishOutput;
+    try {
+        publishOutput = yield execNpm('publish');
+    } catch(e) {
+        console.error('npm publish failed, rolling back commits and tags');
+        yield child_process.exec(`git tag -d v${newVersion}`);
+        yield child_process.exec('git reset --hard HEAD~1');
+        return;
+    }
+    log(publishOutput);
 
     // Add missing admins
     console.log('Adding missing admins');
