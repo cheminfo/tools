@@ -15,7 +15,8 @@ program
     .option('-e, --entry [file]', 'Library entry point')
     .option('-b, --babel', 'Enable babel loader for ES6 features (deprecated - always on)')
     .option('-u, --no-uglify', 'Disable generation of min file with source map')
-    .option('-v, --verbose', 'Output warnings if any');
+    .option('-v, --verbose', 'Output warnings if any')
+    .option('-w, --watch', 'Watch changes');
 
 
 program.parse(process.argv);
@@ -47,7 +48,8 @@ var webpackConfig = {
         library: name,
         libraryTarget: 'umd'
     },
-    plugins: []
+    plugins: [],
+    watch: program.watch
 };
 
 if (program.babel) {
@@ -80,7 +82,9 @@ webpack(webpackConfig, function (err, stats) {
         throw err;
     } else if (jsonStats.errors.length > 0) {
         printErrors(jsonStats.errors);
-        process.exit(1);
+        if(!program.watch) {
+            process.exit(1);
+        }
     } else if (jsonStats.warnings.length > 0 && program.verbose) {
         printErrors(jsonStats.warnings);
     } else {
