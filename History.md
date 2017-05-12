@@ -1,3 +1,13 @@
+<a name="1.16.0"></a>
+# [1.16.0](https://github.com/cheminfo/tools/compare/v1.15.0...v1.16.0) (2017-05-12)
+
+
+### Features
+
+* **cheminfo-build:** add watch option ([1712106](https://github.com/cheminfo/tools/commit/1712106))
+
+
+
 <a name="1.15.0"></a>
 # [1.15.0](https://github.com/cheminfo/tools/compare/v1.14.1...v1.15.0) (2017-03-10)
 
