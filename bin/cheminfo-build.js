@@ -71,7 +71,8 @@ var babelConfig = {
                     ]
                 }
             }]
-        ]
+        ],
+        plugins: ['babel-plugin-transform-es2015-block-scoping']
     }
 };
 webpackConfig.module.rules.push(babelConfig);
