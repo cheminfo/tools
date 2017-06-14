@@ -14,11 +14,13 @@ program
     .option('-r, --root [rootname]', 'Root name of the library')
     .option('-e, --entry [file]', 'Library entry point')
     .option('-b, --babel', 'Enable babel loader for ES6 features (deprecated - always on)')
+    .option('-E, --es2015', 'Build a target that converts all ecma features to es2015')
     .option('-u, --no-uglify', 'Disable generation of min file with source map')
     .option('-v, --verbose', 'Output warnings if any')
     .option('-w, --watch', 'Watch changes');
 
 
+console.log(process.argv);
 program.parse(process.argv);
 
 var cwd = path.resolve(program.cwd);
@@ -36,70 +38,102 @@ if (!name) {
 
 var filename = program.outName || pkg.name || 'bundle';
 
-var webpackConfig = {
+var webpackConfig = [{
     context: cwd,
     entry: path.resolve(cwd, entryPoint),
     module: {
-        rules: []
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                options: {
+                    presets: [
+                        ['env', {
+                            targets: {
+                                browsers: [
+                                    'chrome >= 54',
+                                    'last 2 edge versions',
+                                    'last 1 safari version'
+                                ]
+                            }
+                        }]
+                    ],
+                    plugins: ['babel-plugin-transform-es2015-block-scoping']
+                }
+            }
+        ]
     },
     output: {
         path: path.resolve(cwd, program.out),
-        filename: filename + '.js',
+        filename: `${filename}.js`,
         library: name,
         libraryTarget: 'umd'
     },
     plugins: [],
     watch: program.watch
-};
+}];
+
+if (program.es2015) {
+    webpackConfig.push({
+        context: cwd,
+        entry: path.resolve(cwd, entryPoint),
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ([
+                            'es2015', 'es2016', 'es2017'
+                        ].map(preset => `babel-preset-${preset}`).map(require.resolve)),
+                        plugins: ['babel-plugin-transform-es2015-block-scoping']
+                    }
+                }
+            ]
+        },
+        output: {
+            path: path.resolve(cwd, program.out),
+            filename: `${filename}-es2015.js`,
+            library: name,
+            libraryTarget: 'umd'
+        },
+        plugins: [],
+        watch: program.watch
+    });
+}
 
 if (program.babel) {
     process.emitWarning('The --babel option is now always enabled and targets the latest browsers using babel-preset-env', 'DeprecationWarning');
 }
 
-var babelConfig = {
-    test: /\.js$/,
-    exclude: /node_modules/,
-    loader: 'babel-loader',
-    options: {
-        presets: [
-            ['env', {
-                targets: {
-                    browsers: [
-                        'chrome >= 54',
-                        'last 2 edge versions',
-                        'last 1 safari version'
-                    ]
-                }
-            }]
-        ],
-        plugins: ['babel-plugin-transform-es2015-block-scoping']
-    }
-};
-webpackConfig.module.rules.push(babelConfig);
 
-webpack(webpackConfig, function (err, stats) {
-    var jsonStats = stats.toJson();
-    if (err) {
-        throw err;
-    } else if (jsonStats.errors.length > 0) {
-        printErrors(jsonStats.errors);
-        if(!program.watch) {
-            process.exit(1);
+for (let i = 0; i < webpackConfig.length; i++) {
+    webpack(webpackConfig[i], function (err, stats) {
+        var jsonStats = stats.toJson();
+        if (err) {
+            throw err;
+        } else if (jsonStats.errors.length > 0) {
+            printErrors(jsonStats.errors);
+            if (!program.watch) {
+                process.exit(1);
+            }
+        } else if (jsonStats.warnings.length > 0 && program.verbose) {
+            printErrors(jsonStats.warnings);
+        } else {
+            console.log('Build of ' + webpackConfig[i].output.filename + ' successful');
+            if (program.uglify) {
+                doMinify(webpackConfig[i]);
+            }
         }
-    } else if (jsonStats.warnings.length > 0 && program.verbose) {
-        printErrors(jsonStats.warnings);
-    } else {
-        console.log('Build of ' + filename + ' successful');
-        if (program.uglify) {
-            doMinify();
-        }
-    }
-});
+    });
+}
 
-function doMinify() {
+
+function doMinify(webpackConfig) {
     webpackConfig.devtool = 'source-map';
     webpackConfig.output.devtoolModuleFilenameTemplate = 'webpack:///' + (pkg.name || '') + '/[resource-path]';
-    webpackConfig.output.filename = filename + '.min.js';
+    webpackConfig.output.filename = webpackConfig.output.filename + '.min.js';
     var Babili = require('babili-webpack-plugin');
     webpackConfig.plugins.push(new Babili());
     webpack(webpackConfig, function (err, stats) {
@@ -112,7 +146,7 @@ function doMinify() {
         } else if (jsonStats.warnings.length > 0 && program.verbose) {
             printErrors(jsonStats.warnings);
         } else {
-            console.log('Build of ' + filename + ' (min) successful');
+            console.log('Build of ' + webpackConfig.output.filename + ' successful');
         }
     });
 }
