@@ -133,7 +133,7 @@ for (let i = 0; i < webpackConfig.length; i++) {
 function doMinify(webpackConfig) {
     webpackConfig.devtool = 'source-map';
     webpackConfig.output.devtoolModuleFilenameTemplate = 'webpack:///' + (pkg.name || '') + '/[resource-path]';
-    webpackConfig.output.filename = webpackConfig.output.filename + '.min.js';
+    webpackConfig.output.filename = webpackConfig.output.filename.replace(/\.js$/, '') + '.min.js';
     var Babili = require('babili-webpack-plugin');
     webpackConfig.plugins.push(new Babili());
     webpack(webpackConfig, function (err, stats) {
