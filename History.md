@@ -1,3 +1,13 @@
+<a name="1.17.0"></a>
+# [1.17.0](https://github.com/cheminfo/tools/compare/v1.16.2...v1.17.0) (2017-06-21)
+
+
+### Features
+
+* add es2015 option ([a10b724](https://github.com/cheminfo/tools/commit/a10b724))
+
+
+
 <a name="1.16.2"></a>
 ## [1.16.2](https://github.com/cheminfo/tools/compare/v1.16.1...v1.16.2) (2017-06-12)
 
