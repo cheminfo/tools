@@ -20,7 +20,6 @@ program
     .option('-w, --watch', 'Watch changes');
 
 
-console.log(process.argv);
 program.parse(process.argv);
 
 var cwd = path.resolve(program.cwd);
