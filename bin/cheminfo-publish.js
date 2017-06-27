@@ -50,15 +50,6 @@ co(function *(){
     // Get npm username
     const name = parseName(yield execNpm('whoami'));
 
-    // Get admin list for org
-    const adminInfo = yield request('https://www.cheminfo.org/_tools/admin.json', {json: true});
-    const orgs = Object.keys(adminInfo).filter(org => adminInfo[org].indexOf(name) !== -1);
-
-    if (orgs.length === 0) {
-        console.error('Found no org with publish rights');
-        return;
-    }
-
     const packgeJSONPath = path.resolve('package.json');
     const packageJSON = require(packgeJSONPath);
 
@@ -71,16 +62,16 @@ co(function *(){
             type: 'list',
             message: 'Choose an organization',
             name: 'org',
-            choices: orgs
+            choices: ['mljs', 'cheminfo', 'cheminfo-js']
         })).org;
     }
 
-    if (orgs.indexOf(org) === -1) {
+    // Get admin list for org
+    const adminList = yield execNpm(`team ls ${org}:developers`);
+    if (adminList.indexOf(name) === -1) {
         console.error(`Org (${org}) does not exist or you (${name}) are not allowed to publish in it`);
         return;
     }
-
-    var adminList = adminInfo[org];
 
     // Get the name of the package
     const packageName = packageJSON.name;
@@ -93,19 +84,6 @@ co(function *(){
 
     function formatToBump(type) {
         return `${type} (${bumpVersion[type]})`;
-    }
-
-    // Get npm info on the package
-    var owners = [];
-    try {
-        owners = parseOwners(yield execNpm('owner ls'));
-        if (owners.indexOf(name) === -1)
-            throw new Error(`You (${name}) are not allowed to publish ${packageName}.
-You can ask one of the current owners for permission: ${owners}`);
-    } catch (e) {
-        if (e.message.indexOf('is not in the npm registry') === -1) {
-            throw e;
-        }
     }
 
     const toBump = yield getRecommendedBump();
@@ -177,11 +155,7 @@ You chose ${formatToBump(bump)} instead.`);
 
     // Add missing admins
     console.log('Adding missing admins');
-    for (var admin of adminList) {
-        if (owners.indexOf(admin) === -1) {
-            log(yield execNpm('owner add ' + admin));
-        }
-    }
+    log(yield execNpm(`access grant read-write ${org}:developers`));
 
     // Push to GitHub
     console.log('Pushing to GitHub');
