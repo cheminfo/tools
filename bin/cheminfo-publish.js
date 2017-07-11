@@ -14,6 +14,7 @@ const path = require('path');
 const recommendedBump = require('conventional-recommended-bump');
 const request = require('request-promise');
 const semver = require('semver');
+const chalk = require('chalk');
 
 const generateDoc = require('../src/generateDoc');
 const util = require('../src/util');
@@ -37,13 +38,13 @@ co(function *(){
 
     const currentBranch = yield git.branchName();
     if (currentBranch !== 'master') {
-        console.error(`You must be on master branch. Current branch: ${currentBranch}`);
+        errorLog(`You must be on master branch. Current branch: ${currentBranch}`);
         return;
     }
 
     const hasChanges = yield git.hasChanges();
     if (hasChanges) {
-        console.error(`You have uncommitted changes.`);
+        errorLog(`You have uncommitted changes.`);
         return;
     }
 
@@ -62,14 +63,17 @@ co(function *(){
             type: 'list',
             message: 'Choose an organization',
             name: 'org',
-            choices: ['mljs', 'cheminfo', 'cheminfo-js']
+            choices: ['mljs', 'cheminfo']
         })).org;
     }
 
     // Get admin list for org
-    const adminList = yield execNpm(`team ls ${org}:developers`);
+    if (org === 'cheminfo-js') {
+        org = 'cheminfo'
+    }
+    const adminList = parseOwners(yield execNpm(`team ls ${org}:developers`));
     if (adminList.indexOf(name) === -1) {
-        console.error(`Org (${org}) does not exist or you (${name}) are not allowed to publish in it`);
+        errorLog(`Org (${org}) does not exist or you (${name}) are not allowed to publish in it`);
         return;
     }
 
@@ -90,7 +94,7 @@ co(function *(){
     let bump = program.bump;
 
     if (bump && bump !== 'major' && bump !== 'minor' && bump !== 'patch') {
-        console.error(`Invalid bump type: ${bump}`);
+        errorLog(`Invalid bump type: ${bump}`);
         return;
     }
 
@@ -146,7 +150,7 @@ You chose ${formatToBump(bump)} instead.`);
     try {
         publishOutput = yield execNpm('publish');
     } catch(e) {
-        console.error('npm publish failed, rolling back commits and tags');
+        errorLog('npm publish failed, rolling back commits and tags');
         yield child_process.exec(`git tag -d v${newVersion}`);
         yield child_process.exec('git reset --hard HEAD~1');
         return;
@@ -155,15 +159,22 @@ You chose ${formatToBump(bump)} instead.`);
 
     // Add missing admins
     console.log('Adding missing admins');
-    log(yield execNpm(`access grant read-write ${org}:developers`));
+    try {
+        var addAdmins = yield execNpm(`access grant read-write ${org}:developers`);
+        log(addAdmins);
+    } catch(e) {
+        var firstAuthor = parseOwners(yield execNpm('access ls-collaborators'))[0];
+        console.log(chalk`{red You (${name}) are not allowed to grant permissions on this package.
+Check that you are an admin on ${org} or ask the first author (${firstAuthor}) to run {black.bgRed "npm access grant read-write ${org}:developers ${packageName}"}}`);
+    }
 
     // Push to GitHub
     console.log('Pushing to GitHub');
     try {
         log(yield child_process.exec('git push --follow-tags'));
     } catch (e) {
-        console.error(e);
-        console.error('Command "git push --follow-tags" failed.\nYou need to resolve the problem manually');
+        errorLog(e);
+        errorLog('Command "git push --follow-tags" failed.\nYou need to resolve the problem manually');
     }
 
     // Documentation
@@ -172,7 +183,7 @@ You chose ${formatToBump(bump)} instead.`);
     }
 
 }).catch(function (err) {
-    console.error(err);
+    errorLog(err);
 });
 
 function execNpm(command) {
@@ -184,18 +195,16 @@ function parseName(name) {
 }
 
 function parseOwners(owners) {
-    return owners[0].split('\n').map(function (owner) {
-        return owner.substring(0, owner.indexOf(' '));
-    }).filter(filterEmpty);
-}
-
-function filterEmpty(el) {
-    return !!el;
+    return owners[0].match(/"(\w+)"/g).map((str) => str.slice(1, str.length - 1));
 }
 
 function log(result) {
     if (result[0]) process.stdout.write(result[0]);
     if (result[1]) process.stderr.write(result[1]);
+}
+
+function errorLog(err) {
+    console.log(chalk.red(err));
 }
 
 function getRecommendedBump() {
@@ -216,7 +225,7 @@ function *updateHistory() {
     if (yield fs.exists(HISTORY_FILE)) { // File exists. Append latest version to current history.
         const newHistory = yield createChangelog(changelogOptions);
         if (newHistory.length === 0) {
-            console.error('No history to write. There must be a problem.');
+            errorLog('No history to write. There must be a problem.');
             return;
         }
         const currentHistory = yield fs.readFile(HISTORY_FILE);
