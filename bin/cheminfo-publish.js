@@ -164,8 +164,8 @@ You chose ${formatToBump(bump)} instead.`);
         log(addAdmins);
     } catch(e) {
         var firstAuthor = parseOwners(yield execNpm('access ls-collaborators'))[0];
-        console.log(chalk`{red You (${name}) are not allowed to grant permissions on this package.
-Check that you are an admin on ${org} or ask the first author (${firstAuthor}) to run {black.bgRed "npm access grant read-write ${org}:developers ${packageName}"}}`);
+        console.log(chalk`{rgb(255,99,99) You (${name}) are not allowed to grant permissions on this package.
+Check that you are an admin on ${org} or ask the first author (${firstAuthor}) to run {bold.black.bgRgb(252,141,141) "npm access grant read-write ${org}:developers ${packageName}"}}`);
     }
 
     // Push to GitHub
@@ -204,7 +204,7 @@ function log(result) {
 }
 
 function errorLog(err) {
-    console.log(chalk.red(err));
+    console.log(chalk.rgb(255,99,99)(err));
 }
 
 function getRecommendedBump() {
