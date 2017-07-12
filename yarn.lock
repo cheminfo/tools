@@ -2443,12 +2443,12 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-generator-cheminfo@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/generator-cheminfo/-/generator-cheminfo-2.4.0.tgz#4cc5b5cb08520f49fd3a354b07ebe46a9c970273"
+generator-cheminfo@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/generator-cheminfo/-/generator-cheminfo-3.0.0.tgz#003fb7427abbaa1cee0a7b6a6d400480f2f06bb5"
   dependencies:
     camelcase "^4.0.0"
-    chalk "^1.0.0"
+    chalk "^2.0.1"
     which "^1.2.12"
     yeoman-generator "^1.0.1"
     yosay "^2.0.0"
