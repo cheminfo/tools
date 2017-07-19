@@ -1,3 +1,13 @@
+<a name="1.19.0"></a>
+# [1.19.0](https://github.com/cheminfo/tools/compare/v1.18.1...v1.19.0) (2017-07-19)
+
+
+### Features
+
+* **publish:** support npm organizations ([#209](https://github.com/cheminfo/tools/issues/209)) ([8dc4a23](https://github.com/cheminfo/tools/commit/8dc4a23))
+
+
+
 <a name="1.18.1"></a>
 ## [1.18.1](https://github.com/cheminfo/tools/compare/v1.18.0...v1.18.1) (2017-07-13)
 
