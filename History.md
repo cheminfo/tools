@@ -1,3 +1,13 @@
+<a name="1.18.1"></a>
+## [1.18.1](https://github.com/cheminfo/tools/compare/v1.18.0...v1.18.1) (2017-07-13)
+
+
+### Bug Fixes
+
+* transpile all js files ([215eade](https://github.com/cheminfo/tools/commit/215eade))
+
+
+
 <a name="1.17.1"></a>
 ## [1.17.1](https://github.com/cheminfo/tools/compare/v1.17.0...v1.17.1) (2017-06-21)
 
