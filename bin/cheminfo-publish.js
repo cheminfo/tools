@@ -49,6 +49,8 @@ co(function *(){
         return;
     }
 
+    yield git.exec('git pull --rebase');
+
     // Get npm username
     const name = parseName(yield execNpm('whoami'));
 
