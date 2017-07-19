@@ -15,6 +15,7 @@ const recommendedBump = require('conventional-recommended-bump');
 const request = require('request-promise');
 const semver = require('semver');
 const chalk = require('chalk');
+const ERROR_COLOR = 'rgb(255,99,99)';
 
 const generateDoc = require('../src/generateDoc');
 const util = require('../src/util');
@@ -71,7 +72,7 @@ co(function *(){
     if (org === 'cheminfo-js') {
         org = 'cheminfo'
     }
-    const adminList = parseOwners(yield execNpm(`team ls ${org}:developers`));
+    const adminList = JSON.parse((yield execNpm(`team ls ${org}:developers`))[0]);
     if (adminList.indexOf(name) === -1) {
         errorLog(`Org (${org}) does not exist or you (${name}) are not allowed to publish in it`);
         return;
@@ -157,15 +158,23 @@ You chose ${formatToBump(bump)} instead.`);
     }
     log(publishOutput);
 
-    // Add missing admins
-    console.log('Adding missing admins');
+    // Add to organization
+    var packages;
     try {
-        var addAdmins = yield execNpm(`access grant read-write ${org}:developers`);
-        log(addAdmins);
+        packages = JSON.parse((yield execNpm(`access ls-packages ${org}:developers`))[0]);
     } catch(e) {
-        var firstAuthor = parseOwners(yield execNpm('access ls-collaborators'))[0];
-        console.log(chalk`{rgb(255,99,99) You (${name}) are not allowed to grant permissions on this package.
-Check that you are an admin on ${org} or ask the first author (${firstAuthor}) to run {bold.black.bgRgb(252,141,141) "npm access grant read-write ${org}:developers ${packageName}"}}`);
+        errorLog(`{${ERROR_COLOR} This team may not exist (${org}:developers)`);
+    }
+
+    if (!packages || !packages[packageName]) {
+        console.log('Adding to organization');
+        try {
+            var addAdmins = yield execNpm(`access grant read-write ${org}:developers`);
+            log(addAdmins);
+        } catch(e) {
+            console.log(chalk`{${ERROR_COLOR} You (${name}) are not allowed to grant permissions on this package.
+Check that you are an admin on ${org} or ask the first author to run {bold.black.bgRgb(252,141,141) "npm access grant read-write ${org}:developers ${packageName}"}}`);
+        }
     }
 
     // Push to GitHub
@@ -194,17 +203,13 @@ function parseName(name) {
     return name[0].substr(0, name[0].length - 1);
 }
 
-function parseOwners(owners) {
-    return owners[0].match(/"(\w+)"/g).map((str) => str.slice(1, str.length - 1));
-}
-
 function log(result) {
     if (result[0]) process.stdout.write(result[0]);
     if (result[1]) process.stderr.write(result[1]);
 }
 
 function errorLog(err) {
-    console.log(chalk.rgb(255,99,99)(err));
+    console.log(chalk.rgb(255, 99, 99)(err));
 }
 
 function getRecommendedBump() {
