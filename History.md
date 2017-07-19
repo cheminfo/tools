@@ -1,3 +1,19 @@
+<a name="1.19.1"></a>
+## [1.19.1](https://github.com/cheminfo/tools/compare/v1.19.0...v1.19.1) (2017-07-19)
+
+
+### Bug Fixes
+
+* don't add to org if already on it ([#211](https://github.com/cheminfo/tools/issues/211)) ([e0ddada](https://github.com/cheminfo/tools/commit/e0ddada))
+* use doc module for build documentation ([66b8ee8](https://github.com/cheminfo/tools/commit/66b8ee8))
+
+
+### Features
+
+* git pull before commit ([fd17739](https://github.com/cheminfo/tools/commit/fd17739))
+
+
+
 <a name="1.19.0"></a>
 # [1.19.0](https://github.com/cheminfo/tools/compare/v1.18.1...v1.19.0) (2017-07-19)
 
