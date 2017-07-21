@@ -32,7 +32,7 @@ program.parse(process.argv);
 
 const force = program.force;
 
-co(function *(){
+co(function* () {
 
     const shouldStop = yield util.checkLatestVersion(force);
     if (shouldStop) return;
@@ -54,8 +54,10 @@ co(function *(){
     // Get npm username
     const name = parseName(yield execNpm('whoami'));
 
-    const packgeJSONPath = path.resolve('package.json');
-    const packageJSON = require(packgeJSONPath);
+    const packageJSONPath = path.resolve('package.json');
+    const packageLockPath = path.resolve(packageJSONPath, '../package-lock.json');
+    const packageJSON = require(packageJSONPath);
+    const hasPackageLock = yield fs.exists(packageLockPath);
 
     let org = program.org;
     if (!org) {
@@ -72,7 +74,7 @@ co(function *(){
 
     // Get admin list for org
     if (org === 'cheminfo-js') {
-        org = 'cheminfo'
+        org = 'cheminfo';
     }
     const adminList = JSON.parse((yield execNpm(`team ls ${org}:developers`))[0]);
     if (adminList.indexOf(name) === -1) {
@@ -135,15 +137,24 @@ You chose ${formatToBump(bump)} instead.`);
     // Bump version
     console.log('Bumping version');
     const newVersion = bumpVersion[bump];
-    let packData = yield fs.readFile(packgeJSONPath, 'utf8');
-    packData = packData.replace(/"version": "[^"]+"/, `"version": "${newVersion}"`);
-    yield fs.writeFile(packgeJSONPath, packData);
+    const newVersionString = `"version": "${newVersion}"`;
+    const versionReg = /"version": "[^"]+"/;
+
+    let packData = yield fs.readFile(packageJSONPath, 'utf8');
+    packData = packData.replace(versionReg, newVersionString);
+    yield fs.writeFile(packageJSONPath, packData);
+
+    if (hasPackageLock) {
+        let packLockData = yield fs.readFile(packageLockPath, 'utf8');
+        packLockData = packLockData.replace(versionReg, newVersionString);
+        yield fs.writeFile(packageLockPath, packLockData);
+    }
 
     // Add/update changelog
     yield updateHistory();
 
     // Commit the update and tag it
-    yield child_process.exec('git add package.json History.md');
+    yield child_process.exec('git add package.json History.md' + (hasPackageLock ? ' package-lock.json' : ''));
     yield child_process.exec(`git commit -m ${newVersion}`);
     yield child_process.exec(`git tag -a v${newVersion} -m v${newVersion}`);
 
@@ -152,7 +163,7 @@ You chose ${formatToBump(bump)} instead.`);
     var publishOutput;
     try {
         publishOutput = yield execNpm('publish');
-    } catch(e) {
+    } catch (e) {
         errorLog('npm publish failed, rolling back commits and tags');
         yield child_process.exec(`git tag -d v${newVersion}`);
         yield child_process.exec('git reset --hard HEAD~1');
@@ -164,7 +175,7 @@ You chose ${formatToBump(bump)} instead.`);
     var packages;
     try {
         packages = JSON.parse((yield execNpm(`access ls-packages ${org}:developers`))[0]);
-    } catch(e) {
+    } catch (e) {
         errorLog(`{${ERROR_COLOR} This team may not exist (${org}:developers)`);
     }
 
@@ -173,7 +184,7 @@ You chose ${formatToBump(bump)} instead.`);
         try {
             var addAdmins = yield execNpm(`access grant read-write ${org}:developers`);
             log(addAdmins);
-        } catch(e) {
+        } catch (e) {
             console.log(chalk`{${ERROR_COLOR} You (${name}) are not allowed to grant permissions on this package.
 Check that you are an admin on ${org} or ask the first author to run {bold.black.bgRgb(252,141,141) "npm access grant read-write ${org}:developers ${packageName}"}}`);
         }
@@ -223,7 +234,7 @@ function getRecommendedBump() {
     });
 }
 
-function *updateHistory() {
+function* updateHistory() {
     const HISTORY_FILE = 'History.md';
     const changelogOptions = {
         preset: 'angular',
