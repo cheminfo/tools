@@ -1,3 +1,13 @@
+<a name="1.19.2"></a>
+## [1.19.2](https://github.com/cheminfo/tools/compare/v1.19.1...v1.19.2) (2017-07-21)
+
+
+### Bug Fixes
+
+* bump version in package-lock.json if present ([23744fd](https://github.com/cheminfo/tools/commit/23744fd))
+
+
+
 <a name="1.19.1"></a>
 ## [1.19.1](https://github.com/cheminfo/tools/compare/v1.19.0...v1.19.1) (2017-07-19)
 
