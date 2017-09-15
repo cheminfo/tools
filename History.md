@@ -1,3 +1,8 @@
+<a name="1.19.3"></a>
+## [1.19.3](https://github.com/cheminfo/tools/compare/v1.19.2...v1.19.3) (2017-09-15)
+
+
+
 <a name="1.19.2"></a>
 ## [1.19.2](https://github.com/cheminfo/tools/compare/v1.19.1...v1.19.2) (2017-07-21)
 
