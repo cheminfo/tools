@@ -14,7 +14,6 @@ program
     .option('-r, --root [rootname]', 'Root name of the library')
     .option('-e, --entry [file]', 'Library entry point')
     .option('-b, --babel', 'Enable babel loader for ES6 features (deprecated - always on)')
-    .option('-E, --es2015', 'Build a target that converts all ecma features to es2015')
     .option('-u, --no-uglify', 'Disable generation of min file with source map')
     .option('-v, --verbose', 'Output warnings if any')
     .option('-w, --watch', 'Watch changes');
@@ -69,37 +68,9 @@ var webpackConfig = [{
         libraryTarget: 'umd'
     },
     plugins: [],
+    devtool: 'source-map',
     watch: program.watch
 }];
-
-if (program.es2015) {
-    webpackConfig.push({
-        context: cwd,
-        entry: path.resolve(cwd, entryPoint),
-        module: {
-            rules: [
-                {
-                    test: /\.js$/,
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ([
-                            'es2015', 'es2016', 'es2017'
-                        ].map(preset => `babel-preset-${preset}`).map(require.resolve)),
-                        plugins: ['babel-plugin-transform-es2015-block-scoping']
-                    }
-                }
-            ]
-        },
-        output: {
-            path: path.resolve(cwd, program.out),
-            filename: `${filename}-es2015.js`,
-            library: name,
-            libraryTarget: 'umd'
-        },
-        plugins: [],
-        watch: program.watch
-    });
-}
 
 if (program.babel) {
     process.emitWarning('The --babel option is now always enabled and targets the latest browsers using babel-preset-env', 'DeprecationWarning');
@@ -129,11 +100,9 @@ for (let i = 0; i < webpackConfig.length; i++) {
 
 
 function doMinify(webpackConfig) {
-    webpackConfig.devtool = 'source-map';
-    webpackConfig.output.devtoolModuleFilenameTemplate = 'webpack:///' + (pkg.name || '') + '/[resource-path]';
     webpackConfig.output.filename = webpackConfig.output.filename.replace(/\.js$/, '') + '.min.js';
-    var Babili = require('babili-webpack-plugin');
-    webpackConfig.plugins.push(new Babili());
+    var Minify = require('babel-minify-webpack-plugin');
+    webpackConfig.plugins.push(new Minify());
     webpack(webpackConfig, function (err, stats) {
         var jsonStats = stats.toJson();
         if (err) {
