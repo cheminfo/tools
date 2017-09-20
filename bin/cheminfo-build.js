@@ -2,10 +2,12 @@
 
 'use strict';
 
-var program = require('commander');
-var webpack = require('webpack');
-var path = require('path');
-var fs = require('fs');
+const program = require('commander');
+const webpack = require('webpack');
+const path = require('path');
+const fs = require('fs');
+
+const banner = require('../src/banner');
 
 program
     .option('-c, --cwd [dirname]', 'Working directory', process.cwd())
@@ -67,7 +69,12 @@ var webpackConfig = [{
         library: name,
         libraryTarget: 'umd'
     },
-    plugins: [],
+    plugins: [
+        new webpack.BannerPlugin({
+            banner: banner.getMainBanner(pkg),
+            raw: true
+        })
+    ],
     devtool: 'source-map',
     watch: program.watch
 }];
@@ -101,8 +108,12 @@ for (let i = 0; i < webpackConfig.length; i++) {
 
 function doMinify(webpackConfig) {
     webpackConfig.output.filename = webpackConfig.output.filename.replace(/\.js$/, '') + '.min.js';
+    webpackConfig.plugins[0] = new webpack.BannerPlugin({
+        banner: banner.getMinBanner(pkg),
+        raw: true
+    });
     var Minify = require('babel-minify-webpack-plugin');
-    webpackConfig.plugins.push(new Minify());
+    webpackConfig.plugins.unshift(new Minify());
     webpack(webpackConfig, function (err, stats) {
         var jsonStats = stats.toJson();
         if (err) {

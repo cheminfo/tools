@@ -1,5 +1,8 @@
 {
   "name": "project2",
   "version": "1.0.0",
-  "main": "main"
+  "main": "main",
+  "license": "MIT",
+  "description": "Project 2",
+  "homepage": "https://project2.example.com"
 }
