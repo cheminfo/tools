@@ -1,3 +1,13 @@
+<a name="1.20.0"></a>
+# [1.20.0](https://github.com/cheminfo/tools/compare/v1.19.4...v1.20.0) (2017-09-20)
+
+
+### Features
+
+* add a banner to build artifacts ([5211d03](https://github.com/cheminfo/tools/commit/5211d03))
+
+
+
 <a name="1.19.4"></a>
 ## [1.19.4](https://github.com/cheminfo/tools/compare/v1.19.3...v1.19.4) (2017-09-15)
 
