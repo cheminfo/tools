@@ -23,6 +23,7 @@ Make a browser build using webpack
 * **-e, --entry**: entry point of the library. Default: main field of npm package or index.js
 * **-b, --babel**: enable babel loader for ES6 features
 * **-u, --no-uglify**: disable generation of min file and source map
+* **--no-source-map**: disable generation of source map only
 * **-v, --verbose**: output warnings if any
 
 ### doc

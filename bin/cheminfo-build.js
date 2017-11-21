@@ -17,9 +17,9 @@ program
     .option('-e, --entry [file]', 'Library entry point')
     .option('-b, --babel', 'Enable babel loader for ES6 features (deprecated - always on)')
     .option('-u, --no-uglify', 'Disable generation of min file with source map')
+    .option('--no-source-map', 'Disable generation of source map only')
     .option('-v, --verbose', 'Output warnings if any')
     .option('-w, --watch', 'Watch changes');
-
 
 program.parse(process.argv);
 
@@ -75,7 +75,7 @@ var webpackConfig = [{
             raw: true
         })
     ],
-    devtool: 'source-map',
+    devtool: program.sourceMap ? 'source-map' : false,
     watch: program.watch
 }];
 
