@@ -112,7 +112,7 @@ function doMinify(webpackConfig) {
         banner: banner.getMinBanner(pkg),
         raw: true
     });
-    var Minify = require('babel-minify-webpack-plugin');
+    var Minify = require('uglifyjs-webpack-plugin');
     webpackConfig.plugins.unshift(new Minify());
     webpack(webpackConfig, function (err, stats) {
         var jsonStats = stats.toJson();
