@@ -107,7 +107,7 @@ When the generator finish there will be the following files:
 install hub and add the line `alias git="hub"` in your bashrc file
 ```
 npm install --global yo
-npm install --global generator-chemifno
+npm install --global generator-cheminfo
 mkdir ABC
 cd ABC
 yo cheminfo:module
