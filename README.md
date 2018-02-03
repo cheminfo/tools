@@ -104,15 +104,16 @@ When the generator finish there will be the following files:
 
 ## Fast creation of a project using yo and cheminfo
 
-install hub and add the line `alias git="hub"` in your bashrc file
+install `hub`
 ```
 npm install --global yo
 npm install --global generator-cheminfo
 mkdir ABC
 cd ABC
 yo cheminfo:module
-git init
-git create cheminfo-js/ABC
+hub init
+hub create cheminfo-js/ABC
+hub push origin master
 ```
 
 ...
