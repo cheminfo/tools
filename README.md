@@ -121,6 +121,11 @@ cheminfo publish
 ```
 ,,,
 
+If you want your package to be private, add in `package.json`
+```
+"private": true,
+```
+
 ## License
 
   [MIT](./LICENSE)
