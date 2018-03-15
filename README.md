@@ -112,6 +112,8 @@ cd ABC
 yo cheminfo:module
 hub init
 hub create cheminfo-js/ABC
+git add * .*
+git commit -m 'first commit'
 hub push origin master
 ```
 
