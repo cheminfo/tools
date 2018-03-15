@@ -106,8 +106,7 @@ When the generator finish there will be the following files:
 
 install `hub`
 ```
-npm install --global yo
-npm install --global generator-cheminfo
+npm install --global yo generator-cheminfo cheminfo-tools
 mkdir ABC
 cd ABC
 yo cheminfo:module
