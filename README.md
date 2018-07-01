@@ -109,7 +109,7 @@ install `hub`
 npm install --global yo generator-cheminfo cheminfo-tools
 mkdir ABC
 cd ABC
-yo cheminfo:module
+yo cheminfo
 hub init
 hub create cheminfo-js/ABC
 git add * .*
