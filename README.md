@@ -117,6 +117,12 @@ git commit -m 'first commit'
 hub push origin master
 ```
 
+Alternative templates:
+* `yo cheminfo:module` ES6 module (import / export)
+* `yo cheminfo:lerna-module`
+* `yo cheminfo:typescript`
+
+
 ### publish
 
 ```
