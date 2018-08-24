@@ -36,7 +36,7 @@ module.exports = function* generateDoc(publish) {
     ]);
     if (publish) {
       yield execa('git', ['add', 'docs']);
-      yield execa('git', ['commit', '-m', '"doc: rebuild docs [ci skip]"']);
+      yield execa('git', ['commit', '-m', 'doc: rebuild docs [ci skip]']);
       yield execa('git', ['push', 'origin', 'master']);
     }
   }
