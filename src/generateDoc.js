@@ -24,13 +24,20 @@ module.exports = function* generateDoc(publish) {
     );
     const pkg = require(process.cwd() + '/package.json');
     const main = pkg.module || pkg.main || '';
-    yield execa.shell(
-      `${documentationExecPath} build ${main} --github --output docs --format html --sort-order alpha`
-    );
+    yield execa(documentationExecPath, [
+      'build',
+      main,
+      '--github',
+      '--output docs',
+      '--format',
+      'html',
+      '--sort-order',
+      'alpha'
+    ]);
     if (publish) {
-      yield execa.shell('git add docs');
-      yield execa.shell('git commit -m "doc: rebuild docs [ci skip]"');
-      yield execa.shell('git push origin master');
+      yield execa('git', ['add', 'docs']);
+      yield execa('git', ['commit', '-m', '"doc: rebuild docs [ci skip]"']);
+      yield execa('git', ['push', 'origin', 'master']);
     }
   }
 };

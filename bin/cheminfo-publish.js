@@ -75,7 +75,7 @@ co(function*() {
     org = 'cheminfo';
   }
   const adminList = JSON.parse(
-    yield execNpmStdout(`team ls ${org}:developers`)
+    yield execNpmStdout('team', 'ls', `${org}:developers`)
   );
   if (adminList.indexOf(name) === -1) {
     errorLog(
@@ -134,7 +134,7 @@ You chose ${formatToBump(bump)} instead.`);
 
   // Execute the tests
   console.log('Running the tests');
-  yield execNpmStdout('run test');
+  yield execNpmStdout('run', 'test');
 
   // Bump version
   console.log('Bumping version');
@@ -156,22 +156,24 @@ You chose ${formatToBump(bump)} instead.`);
   yield updateHistory();
 
   // Commit the update and tag it
-  yield execa.shell(
-    'git add package.json History.md' +
-      (hasPackageLock ? ' package-lock.json' : '')
-  );
-  yield execa.shell(`git commit -m ${newVersion}`);
-  yield execa.shell(`git tag -a v${newVersion} -m v${newVersion}`);
+  const filesToAdd = ['package.json', 'History.md'];
+  if (hasPackageLock) {
+    filesToAdd.push('package-lock.json');
+  }
+  yield execa('git', ['add', ...filesToAdd]);
+  yield execa('git', ['commit', '-m', newVersion]);
+  yield execa('git', ['tag', '-a', `v${newVersion}`, '-m', `v${newVersion}`]);
 
   // Publish package
   console.log('Publishing package');
   var publishOutput;
   try {
+    throw new Error('stop here');
     publishOutput = yield execNpm('publish');
   } catch (e) {
     errorLog('npm publish failed, rolling back commits and tags');
-    yield execa.shell(`git tag -d v${newVersion}`);
-    yield execa.shell('git reset --hard HEAD~1');
+    yield execa('git', ['tag', '-d', `v${newVersion}`]);
+    yield execa('git', ['reset', '--hard', 'HEAD~1']);
     log(e);
     return;
   }
@@ -181,7 +183,7 @@ You chose ${formatToBump(bump)} instead.`);
   var packages;
   try {
     packages = JSON.parse(
-      yield execNpmStdout(`access ls-packages ${org}:developers`)
+      yield execNpmStdout('access', 'ls-packages', `${org}:developers`)
     );
   } catch (e) {
     errorLog(`{${ERROR_COLOR} This team may not exist (${org}:developers)`);
@@ -191,7 +193,10 @@ You chose ${formatToBump(bump)} instead.`);
     console.log('Adding to organization');
     try {
       var addAdmins = yield execNpm(
-        `access grant read-write ${org}:developers`
+        'access',
+        'grant',
+        'read-write',
+        `${org}:developers`
       );
       log(addAdmins);
     } catch (e) {
@@ -203,7 +208,7 @@ Check that you are an admin on ${org} or ask the first author to run {bold.black
   // Push to GitHub
   console.log('Pushing to GitHub');
   try {
-    log(yield execa.shell('git push --follow-tags'));
+    log(yield execa('git', ['push', '--follow-tags']));
   } catch (e) {
     errorLog(e);
     errorLog(
@@ -219,12 +224,12 @@ Check that you are an admin on ${org} or ask the first author to run {bold.black
   errorLog(err);
 });
 
-function execNpm(command) {
-  return execa.shell(`npm ${command}`);
+function execNpm(...args) {
+  return execa('npm', args);
 }
 
-function* execNpmStdout(command) {
-  const { stdout } = yield execNpm(command);
+function* execNpmStdout(...args) {
+  const { stdout } = yield execNpm(...args);
   return stdout;
 }
 
