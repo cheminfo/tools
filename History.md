@@ -1,3 +1,13 @@
+<a name="1.20.3"></a>
+## [1.20.3](https://github.com/cheminfo/tools/compare/v1.20.2...v1.20.3) (2018-08-24)
+
+
+### Bug Fixes
+
+* log publish output when it fails ([3645850](https://github.com/cheminfo/tools/commit/3645850))
+
+
+
 <a name="1.20.2"></a>
 ## [1.20.2](https://github.com/cheminfo/tools/compare/v1.20.1...v1.20.2) (2017-12-04)
 
