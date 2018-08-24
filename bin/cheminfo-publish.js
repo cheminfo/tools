@@ -168,7 +168,6 @@ You chose ${formatToBump(bump)} instead.`);
   console.log('Publishing package');
   var publishOutput;
   try {
-    throw new Error('stop here');
     publishOutput = yield execNpm('publish');
   } catch (e) {
     errorLog('npm publish failed, rolling back commits and tags');
