@@ -48,6 +48,7 @@
     "conventional-changelog": "^1.1.0",
     "conventional-recommended-bump": "^1.0.0",
     "documentation": "^5.3.2",
+    "execa": "^0.11.0",
     "generator-cheminfo": "^3.0.0",
     "ggit": "^1.11.1",
     "inquirer": "^3.3.0",
