@@ -29,7 +29,7 @@ co(function*() {
       console.error('Not a correct git URL: ' + program.url);
       return;
     }
-    yield execa.shell(`git clone ${program.url}`);
+    yield execa('git', ['clone', program.url]);
     process.chdir(res);
   }
 
