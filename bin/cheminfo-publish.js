@@ -75,7 +75,7 @@ co(function*() {
     org = 'cheminfo';
   }
   const adminList = JSON.parse(
-    yield execNpmStdout('team', 'ls', `${org}:developers`)
+    yield execNpm('team', 'ls', `${org}:developers`)
   );
   if (adminList.indexOf(name) === -1) {
     errorLog(
@@ -134,7 +134,7 @@ You chose ${formatToBump(bump)} instead.`);
 
   // Execute the tests
   console.log('Running the tests');
-  yield execNpmStdout('run', 'test');
+  yield execNpm('run', 'test');
 
   // Bump version
   console.log('Bumping version');
@@ -182,7 +182,7 @@ You chose ${formatToBump(bump)} instead.`);
   var packages;
   try {
     packages = JSON.parse(
-      yield execNpmStdout('access', 'ls-packages', `${org}:developers`)
+      yield execNpm('access', 'ls-packages', `${org}:developers`)
     );
   } catch (e) {
     errorLog(`{${ERROR_COLOR} This team may not exist (${org}:developers)`);
