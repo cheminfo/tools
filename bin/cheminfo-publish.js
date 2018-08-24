@@ -168,8 +168,9 @@ You chose ${formatToBump(bump)} instead.`);
         yield child_process.exec(`git tag -d v${newVersion}`);
         yield child_process.exec('git reset --hard HEAD~1');
         return;
+    } finally {
+        log(publishOutput);
     }
-    log(publishOutput);
 
     // Add to organization
     var packages;
