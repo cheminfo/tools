@@ -5,6 +5,7 @@ const terminalLink = require('terminal-link');
 const fs = require('mz/fs');
 const inquirer = require('inquirer');
 const path = require('path');
+const touch = require('touch');
 const { detectTypescript, detectTypedoc } = require('./util');
 
 module.exports = function* generateDoc(publish) {
@@ -38,6 +39,7 @@ module.exports = function* generateDoc(publish) {
         );
       }
       yield execa(documentationExecPath, typedocArgs);
+      yield touch('docs/.nojekyll');
     } else {
       const documentationLibLink = terminalLink(
         'documentation',
