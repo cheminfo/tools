@@ -66,7 +66,7 @@ co(function*() {
       type: 'list',
       message: 'Choose an organization',
       name: 'org',
-      choices: ['mljs', 'cheminfo']
+      choices: ['mljs', 'cheminfo', 'zakodium']
     })).org;
   }
 
