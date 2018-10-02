@@ -82,7 +82,7 @@ co(function*() {
     org = 'cheminfo';
   }
   const adminList = JSON.parse(
-    yield execNpm('team', 'ls', `${org}:developers`)
+    yield execNpmStdout('team', 'ls', `${org}:developers`)
   );
   debug('npm org developers: %s', adminList);
   if (adminList.indexOf(name) === -1) {
@@ -199,7 +199,7 @@ You chose ${formatToBump(bump)} instead.`);
   var packages;
   try {
     packages = JSON.parse(
-      yield execNpm('access', 'ls-packages', `${org}:developers`)
+      yield execNpmStdout('access', 'ls-packages', `${org}:developers`)
     );
   } catch (e) {
     errorLog(`{${ERROR_COLOR} This team may not exist (${org}:developers)`);
@@ -208,7 +208,7 @@ You chose ${formatToBump(bump)} instead.`);
   if (!packages || !packages[packageName]) {
     console.log('Adding to organization');
     try {
-      var addAdmins = yield execNpm(
+      var addAdmins = yield execNpmStdout(
         'access',
         'grant',
         'read-write',
