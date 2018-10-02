@@ -4,6 +4,7 @@
 
 const path = require('path');
 
+const debug = require('debug')('cheminfo:publish');
 const program = require('commander');
 const changelog = require('conventional-changelog');
 const execa = require('execa');
@@ -32,15 +33,19 @@ program.parse(process.argv);
 const force = program.force;
 
 co(function*() {
+  debug('start publish');
   const shouldStop = yield util.checkLatestVersion(force);
   if (shouldStop) return;
 
   const currentBranch = yield git.branchName();
+  debug('current branch is %s', currentBranch);
   if (currentBranch !== 'master') {
     errorLog(`You must be on master branch. Current branch: ${currentBranch}`);
     return;
   }
+
   const hasChanges = yield git.hasChanges();
+  debug('git has changes: %s', hasChanges);
   if (hasChanges) {
     errorLog('You have uncommitted changes.');
     return;
@@ -50,6 +55,7 @@ co(function*() {
 
   // Get npm username
   const name = yield execNpmStdout('whoami');
+  debug('npm user: %s', name);
 
   const packageJSONPath = path.resolve('package.json');
   const packageLockPath = path.resolve(packageJSONPath, '../package-lock.json');
@@ -69,6 +75,7 @@ co(function*() {
       choices: ['mljs', 'cheminfo']
     })).org;
   }
+  debug('npm org: %s', org);
 
   // Get admin list for org
   if (org === 'cheminfo-js') {
@@ -77,6 +84,7 @@ co(function*() {
   const adminList = JSON.parse(
     yield execNpm('team', 'ls', `${org}:developers`)
   );
+  debug('npm org developers: %s', adminList);
   if (adminList.indexOf(name) === -1) {
     errorLog(
       `Org (${org}) does not exist or you (${name}) are not allowed to publish in it`
@@ -92,6 +100,8 @@ co(function*() {
     minor: semver.inc(packageVersion, 'minor'),
     patch: semver.inc(packageVersion, 'patch')
   };
+  debug('package: %s', packageName);
+  debug('current version: %s', packageVersion);
 
   function formatToBump(type) {
     return `${type} (${bumpVersion[type]})`;
@@ -99,6 +109,10 @@ co(function*() {
 
   const toBump = yield getRecommendedBump();
   let bump = program.bump;
+  debug('recommended bump: %s', toBump);
+  if (bump) {
+    debug('bump forced to %s', bump);
+  }
 
   if (bump && bump !== 'major' && bump !== 'minor' && bump !== 'patch') {
     errorLog(`Invalid bump type: ${bump}`);
@@ -131,6 +145,7 @@ You chose ${formatToBump(bump)} instead.`);
     })).c;
     if (!confirm) return;
   }
+  debug('selected bump: %s', bump);
 
   // Execute the tests
   console.log('Running the tests');
@@ -142,11 +157,13 @@ You chose ${formatToBump(bump)} instead.`);
   const newVersionString = `"version": "${newVersion}"`;
   const versionReg = /"version": "[^"]+"/;
 
+  debug('update version in package.json');
   let packData = yield fs.readFile(packageJSONPath, 'utf8');
   packData = packData.replace(versionReg, newVersionString);
   yield fs.writeFile(packageJSONPath, packData);
 
   if (hasPackageLock) {
+    debug('update version in package-lock.json');
     let packLockData = yield fs.readFile(packageLockPath, 'utf8');
     packLockData = packLockData.replace(versionReg, newVersionString);
     yield fs.writeFile(packageLockPath, packLockData);

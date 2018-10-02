@@ -1,5 +1,6 @@
 'use strict';
 
+const debug = require('debug')('cheminfo:util');
 const getLatestVersion = require('latest-version');
 const semver = require('semver');
 const githubParser = require('parse-github-repo-url');
@@ -8,17 +9,23 @@ const fs = require('fs-extra');
 const pack = require('../package.json');
 
 exports.checkLatestVersion = function*(force) {
-  if (force) return false;
+  if (force) {
+    debug('ignoring version check (--force)');
+    return false;
+  }
 
+  debug('getting latest version');
   const latestVersion = yield getLatestVersion('cheminfo-tools');
   const thisVersion = pack.version;
   if (semver.gt(latestVersion, thisVersion)) {
+    debug('version is obsolete');
     console.error(`Your version of cheminfo-tools (${thisVersion}) is obsolete. Latest is ${latestVersion}.
 Please upgrade using the command: npm install -g cheminfo-tools`);
     return true;
+  } else {
+    debug('version is up-to-date');
+    return false;
   }
-
-  return false;
 };
 
 exports.getOrgFromPackage = function getOrgFromPackage(pkg) {

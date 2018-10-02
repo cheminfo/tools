@@ -47,6 +47,7 @@
     "concat-stream": "^1.6.2",
     "conventional-changelog": "^2.0.3",
     "conventional-recommended-bump": "^4.0.1",
+    "debug": "^4.0.1",
     "documentation": "^9.0.0-alpha.0",
     "execa": "^1.0.0",
     "fs-extra": "^7.0.0",
