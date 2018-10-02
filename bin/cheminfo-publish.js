@@ -109,7 +109,7 @@ co(function*() {
 
   const toBump = yield getRecommendedBump();
   let bump = program.bump;
-  debug('recommended bump: %s', toBump);
+  debug('recommended bump: %s', toBump.releaseType);
   if (bump) {
     debug('bump forced to %s', bump);
   }
