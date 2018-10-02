@@ -1,3 +1,21 @@
+<a name="1.21.0"></a>
+# [1.21.0](https://github.com/cheminfo/tools/compare/v1.20.3...v1.21.0) (2018-10-02)
+
+
+### Bug Fixes
+
+* **cheminfo-publish:** show error log when npm publish fails ([38148b0](https://github.com/cheminfo/tools/commit/38148b0))
+* print recommended release type ([41aef78](https://github.com/cheminfo/tools/commit/41aef78))
+* use execNpmStdout when output is parsed ([f169332](https://github.com/cheminfo/tools/commit/f169332))
+
+
+### Features
+
+* add debug ([072fbb8](https://github.com/cheminfo/tools/commit/072fbb8))
+* update all dependencies ([1cda240](https://github.com/cheminfo/tools/commit/1cda240))
+
+
+
 <a name="1.20.3"></a>
 ## [1.20.3](https://github.com/cheminfo/tools/compare/v1.20.2...v1.20.3) (2018-08-24)
 
