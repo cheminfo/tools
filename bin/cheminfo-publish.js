@@ -2,24 +2,24 @@
 
 'use strict';
 
+const path = require('path');
+
 const program = require('commander');
 const changelog = require('conventional-changelog');
 const execa = require('execa');
 const co = require('co');
 const concat = require('concat-stream');
-const fs = require('mz/fs');
+const fs = require('fs-extra');
 const git = require('ggit');
 const inquirer = require('inquirer');
-const path = require('path');
 const recommendedBump = require('conventional-recommended-bump');
 const semver = require('semver');
 const chalk = require('chalk');
+
 const ERROR_COLOR = 'rgb(255,99,99)';
 
 const generateDoc = require('../src/generateDoc');
 const util = require('../src/util');
-
-let version, org;
 
 program
   .option('-b, --bump <bump>', 'kind of version bump')
@@ -42,18 +42,18 @@ co(function*() {
   }
   const hasChanges = yield git.hasChanges();
   if (hasChanges) {
-    errorLog(`You have uncommitted changes.`);
+    errorLog('You have uncommitted changes.');
     return;
   }
 
   yield git.exec('git pull --rebase');
 
   // Get npm username
-
   const name = yield execNpmStdout('whoami');
 
   const packageJSONPath = path.resolve('package.json');
   const packageLockPath = path.resolve(packageJSONPath, '../package-lock.json');
+  // eslint-disable-next-line import/no-dynamic-require
   const packageJSON = require(packageJSONPath);
   const hasPackageLock = yield fs.exists(packageLockPath);
 
@@ -219,7 +219,7 @@ Check that you are an admin on ${org} or ask the first author to run {bold.black
   if (program.doc) {
     yield generateDoc(true);
   }
-}).catch(function(err) {
+}).catch(function (err) {
   errorLog(err);
 });
 
@@ -248,9 +248,12 @@ function errorLog(err) {
 
 function getRecommendedBump() {
   return new Promise((resolve, reject) => {
-    recommendedBump({ preset: 'angular' }, function(err, result) {
-      if (err) return reject(err);
-      resolve(result);
+    recommendedBump({ preset: 'angular' }, function (err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
     });
   });
 }

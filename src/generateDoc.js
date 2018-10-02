@@ -1,11 +1,13 @@
 'use strict';
 
+const path = require('path');
+
 const execa = require('execa');
 const terminalLink = require('terminal-link');
-const fs = require('mz/fs');
+const fs = require('fs-extra');
 const inquirer = require('inquirer');
-const path = require('path');
 const touch = require('touch');
+
 const { detectTypescript, detectTypedoc } = require('./util');
 
 module.exports = function* generateDoc(publish) {
@@ -51,13 +53,15 @@ module.exports = function* generateDoc(publish) {
         __dirname,
         '../node_modules/.bin/documentation'
       );
-      const pkg = require(process.cwd() + '/package.json');
+      // eslint-disable-next-line import/no-dynamic-require
+      const pkg = require(`${process.cwd()}/package.json`);
       const main = pkg.module || pkg.main || '';
       yield execa(documentationExecPath, [
         'build',
         main,
         '--github',
-        '--output docs',
+        '--output',
+        'docs',
         '--format',
         'html',
         '--sort-order',

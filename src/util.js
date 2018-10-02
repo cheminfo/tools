@@ -3,7 +3,7 @@
 const getLatestVersion = require('latest-version');
 const semver = require('semver');
 const githubParser = require('parse-github-repo-url');
-const fs = require('mz/fs');
+const fs = require('fs-extra');
 
 const pack = require('../package.json');
 
@@ -21,7 +21,7 @@ Please upgrade using the command: npm install -g cheminfo-tools`);
   return false;
 };
 
-exports.getOrgFromPackage = function(pkg) {
+exports.getOrgFromPackage = function getOrgFromPackage(pkg) {
   try {
     let url;
     if (typeof pkg.repository === 'string') {
@@ -37,7 +37,7 @@ exports.getOrgFromPackage = function(pkg) {
 
     return githubParser(url)[0];
   } catch (e) {
-    // ignore
+    return null;
   }
 };
 

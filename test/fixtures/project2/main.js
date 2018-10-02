@@ -3,16 +3,17 @@
 let x = 0;
 
 class A {
-    constructor() {
-        console.log(x);
-    }
+  constructor() {
+    console.log(x);
+  }
 }
 
 const y = [0, 1];
 for (let i of y) {
-    console.log(i);
+  console.log(i);
 }
 
 let [, a] = y;
+console.log(a);
 
 module.exports = A;
