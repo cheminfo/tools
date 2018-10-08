@@ -1,3 +1,13 @@
+<a name="1.21.1"></a>
+## [1.21.1](https://github.com/cheminfo/tools/compare/v1.21.0...v1.21.1) (2018-10-08)
+
+
+### Bug Fixes
+
+* **publish:** skip tests with --force ([69ee5c7](https://github.com/cheminfo/tools/commit/69ee5c7))
+
+
+
 <a name="1.21.0"></a>
 # [1.21.0](https://github.com/cheminfo/tools/compare/v1.20.3...v1.21.0) (2018-10-02)
 
