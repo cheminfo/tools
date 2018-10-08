@@ -25,15 +25,36 @@ const util = require('../src/util');
 program
   .option('-b, --bump <bump>', 'kind of version bump')
   .option('-o, --org <org>', 'organization')
-  .option('-f, --force', 'allows to bypass some checks')
+  .option('-f, --force', 'allows to skip some steps')
   .option('-D, --no-doc', 'do not generate and publish documentation');
 
 program.parse(process.argv);
 
 const force = program.force;
+const forceMessage = `Are you sure you want to force the publication?
+This will skip the following steps:
+- Check that cheminfo-tools is up-to-date
+- Run tests
+`;
 
 co(function*() {
   debug('start publish');
+
+  if (force) {
+    const answer = yield inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'ok',
+        message: forceMessage,
+        default: false
+      }
+    ]);
+    if (!answer.ok) {
+      debug('--force was not confirmed. Bailing out...');
+      return;
+    }
+  }
+
   const shouldStop = yield util.checkLatestVersion(force);
   if (shouldStop) return;
 
@@ -148,8 +169,12 @@ You chose ${formatToBump(bump)} instead.`);
   debug('selected bump: %s', bump);
 
   // Execute the tests
-  console.log('Running the tests');
-  yield execNpm('run', 'test');
+  if (!force) {
+    console.log('Running the tests');
+    yield execNpm('run', 'test');
+  } else {
+    debug('skipping tests (--force)');
+  }
 
   // Bump version
   console.log('Bumping version');

@@ -10,7 +10,7 @@ const pack = require('../package.json');
 
 exports.checkLatestVersion = function*(force) {
   if (force) {
-    debug('ignoring version check (--force)');
+    debug('skipping version check (--force)');
     return false;
   }
 
