@@ -9,6 +9,10 @@
     "test": "npm run test-only && npm run eslint",
     "test-only": "jest"
   },
+  "files": [
+    "bin",
+    "src"
+  ],
   "bin": {
     "cheminfo": "./bin/cheminfo.js"
   },
