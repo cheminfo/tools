@@ -1,3 +1,12 @@
+## [1.22.4](https://github.com/cheminfo/tools/compare/v1.22.3...v1.22.4) (2018-11-07)
+
+
+### Bug Fixes
+
+* also publish custom-built docs ([e83e6a1](https://github.com/cheminfo/tools/commit/e83e6a1))
+
+
+
 ## [1.22.3](https://github.com/cheminfo/tools/compare/v1.22.2...v1.22.3) (2018-11-07)
 
 
