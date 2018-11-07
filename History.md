@@ -1,3 +1,13 @@
+# [1.22.0](https://github.com/cheminfo/tools/compare/v1.21.1...v1.22.0) (2018-11-07)
+
+
+### Features
+
+* remove cheminfo-generate ([718b58f](https://github.com/cheminfo/tools/commit/718b58f))
+* **docs:** allow a project to define a custom build-docs script ([6bdcac3](https://github.com/cheminfo/tools/commit/6bdcac3))
+
+
+
 <a name="1.21.1"></a>
 ## [1.21.1](https://github.com/cheminfo/tools/compare/v1.21.0...v1.21.1) (2018-10-08)
 
