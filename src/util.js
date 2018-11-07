@@ -8,14 +8,14 @@ const fs = require('fs-extra');
 
 const pack = require('../package.json');
 
-function* checkLatestVersion(force) {
+async function checkLatestVersion(force) {
   if (force) {
     debug('skipping version check (--force)');
     return false;
   }
 
   debug('getting latest version');
-  const latestVersion = yield getLatestVersion('cheminfo-tools');
+  const latestVersion = await getLatestVersion('cheminfo-tools');
   const thisVersion = pack.version;
   if (semver.gt(latestVersion, thisVersion)) {
     debug('version is obsolete');
@@ -28,12 +28,12 @@ Please upgrade using the command: npm install -g cheminfo-tools`);
   }
 }
 
-function* detectTypedoc() {
-  return yield fs.exists('typedoc.config.js');
+function detectTypedoc() {
+  return fs.exists('typedoc.config.js');
 }
 
-function* detectTypescript() {
-  return yield fs.exists('tsconfig.json');
+function detectTypescript() {
+  return fs.exists('tsconfig.json');
 }
 
 function getOrgFromPackage(pkg) {
@@ -56,8 +56,8 @@ function getOrgFromPackage(pkg) {
   }
 }
 
-function* getPackageJson() {
-  const pack = yield fs.readFile('package.json', 'utf8');
+async function getPackageJson() {
+  const pack = await fs.readFile('package.json', 'utf8');
   return JSON.parse(pack);
 }
 

@@ -3,7 +3,6 @@
 'use strict';
 
 const program = require('commander');
-const co = require('co');
 
 const generateDoc = require('../src/generateDoc');
 const util = require('../src/util');
@@ -16,11 +15,12 @@ program.parse(process.argv);
 
 const force = program.force;
 
-co(function*() {
-  const shouldStop = yield util.checkLatestVersion(force);
+(async () => {
+  const shouldStop = await util.checkLatestVersion(force);
   if (shouldStop) return;
 
-  yield generateDoc(program.publish);
-}).catch(function (err) {
+  await generateDoc(program.publish);
+})().catch(function (err) {
   console.error(err);
+  process.exitCode = 1;
 });

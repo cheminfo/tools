@@ -10,19 +10,19 @@ const touch = require('touch');
 
 const { detectTypescript, detectTypedoc, getPackageJson } = require('./util');
 
-module.exports = function* generateDoc(publish) {
-  const pack = yield getPackageJson();
+module.exports = async function generateDoc(publish) {
+  const pack = await getPackageJson();
   if (pack.scripts && pack.scripts['build-docs']) {
     console.log('Running build-docs npm script to generate documentation');
-    yield execa('npm', ['run', 'build-docs']);
+    await execa('npm', ['run', 'build-docs']);
   } else {
-    const hasDoc = yield fs.exists('docs');
-    const isTypescript = yield detectTypescript();
+    const hasDoc = await fs.exists('docs');
+    const isTypescript = await detectTypescript();
     let wantsDoc = true;
     if (!hasDoc) {
       console.log('This project has no docs folder');
       const docGenerator = isTypescript ? 'typedoc' : 'documentationjs';
-      wantsDoc = (yield inquirer.prompt({
+      wantsDoc = (await inquirer.prompt({
         type: 'confirm',
         name: 'c',
         message: `Do you want to create it using ${docGenerator}?`,
@@ -31,7 +31,7 @@ module.exports = function* generateDoc(publish) {
     }
     if (wantsDoc) {
       if (isTypescript) {
-        const hasTypedocConfig = yield detectTypedoc();
+        const hasTypedocConfig = await detectTypedoc();
         const typedocLink = terminalLink('typedoc', 'https://typedoc.org/');
         console.log('generating docs for typescript project with', typedocLink);
         const documentationExecPath = path.resolve(
@@ -46,8 +46,8 @@ module.exports = function* generateDoc(publish) {
             'you can customize the output by writing a typedoc.config.js file'
           );
         }
-        yield execa(documentationExecPath, typedocArgs);
-        yield touch('docs/.nojekyll');
+        await execa(documentationExecPath, typedocArgs);
+        await touch('docs/.nojekyll');
       } else {
         const documentationLibLink = terminalLink(
           'documentation',
@@ -62,7 +62,7 @@ module.exports = function* generateDoc(publish) {
         // eslint-disable-next-line import/no-dynamic-require
         const pkg = require(`${process.cwd()}/package.json`);
         const main = pkg.module || pkg.main || '';
-        yield execa(documentationExecPath, [
+        await execa(documentationExecPath, [
           'build',
           main,
           '--github',
@@ -77,9 +77,9 @@ module.exports = function* generateDoc(publish) {
     }
 
     if (publish) {
-      yield execa('git', ['add', 'docs']);
-      yield execa('git', ['commit', '-m', 'doc: rebuild docs [ci skip]']);
-      yield execa('git', ['push', 'origin', 'master']);
+      await execa('git', ['add', 'docs']);
+      await execa('git', ['commit', '-m', 'doc: rebuild docs [ci skip]']);
+      await execa('git', ['push', 'origin', 'master']);
     }
   }
 };

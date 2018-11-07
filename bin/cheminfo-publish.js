@@ -8,7 +8,6 @@ const debug = require('debug')('cheminfo:publish');
 const program = require('commander');
 const changelog = require('conventional-changelog');
 const execa = require('execa');
-const co = require('co');
 const concat = require('concat-stream');
 const fs = require('fs-extra');
 const git = require('ggit');
@@ -37,11 +36,11 @@ This will skip the following steps:
 - Run tests
 `;
 
-co(function*() {
+(async ()=> {
   debug('start publish');
 
   if (force) {
-    const answer = yield inquirer.prompt([
+    const answer = await inquirer.prompt([
       {
         type: 'confirm',
         name: 'ok',
@@ -55,41 +54,41 @@ co(function*() {
     }
   }
 
-  const shouldStop = yield util.checkLatestVersion(force);
+  const shouldStop = await util.checkLatestVersion(force);
   if (shouldStop) return;
 
-  const currentBranch = yield git.branchName();
+  const currentBranch = await git.branchName();
   debug('current branch is %s', currentBranch);
   if (currentBranch !== 'master') {
     errorLog(`You must be on master branch. Current branch: ${currentBranch}`);
     return;
   }
 
-  const hasChanges = yield git.hasChanges();
+  const hasChanges = await git.hasChanges();
   debug('git has changes: %s', hasChanges);
   if (hasChanges) {
     errorLog('You have uncommitted changes.');
     return;
   }
 
-  yield git.exec('git pull --rebase');
+  await git.exec('git pull --rebase');
 
   // Get npm username
-  const name = yield execNpmStdout('whoami');
+  const name = await execNpmStdout('whoami');
   debug('npm user: %s', name);
 
   const packageJSONPath = path.resolve('package.json');
   const packageLockPath = path.resolve(packageJSONPath, '../package-lock.json');
   // eslint-disable-next-line import/no-dynamic-require
   const packageJSON = require(packageJSONPath);
-  const hasPackageLock = yield fs.exists(packageLockPath);
+  const hasPackageLock = await fs.exists(packageLockPath);
 
   let org = program.org;
   if (!org) {
     org = util.getOrgFromPackage(packageJSON);
   }
   if (!org) {
-    org = (yield inquirer.prompt({
+    org = (await inquirer.prompt({
       type: 'list',
       message: 'Choose an organization',
       name: 'org',
@@ -103,7 +102,7 @@ co(function*() {
     org = 'cheminfo';
   }
   const adminList = JSON.parse(
-    yield execNpmStdout('team', 'ls', `${org}:developers`)
+    await execNpmStdout('team', 'ls', `${org}:developers`)
   );
   debug('npm org developers: %s', adminList);
   if (adminList.indexOf(name) === -1) {
@@ -128,7 +127,7 @@ co(function*() {
     return `${type} (${bumpVersion[type]})`;
   }
 
-  const toBump = yield getRecommendedBump();
+  const toBump = await getRecommendedBump();
   let bump = program.bump;
   debug('recommended bump: %s', toBump.releaseType);
   if (bump) {
@@ -144,7 +143,7 @@ co(function*() {
   if (!bump) {
     console.log(`${toBump.reason}`);
     console.log(`Recommended bump: ${formatToBump(toBump.releaseType)}`);
-    bump = (yield inquirer.prompt({
+    bump = (await inquirer.prompt({
       type: 'list',
       name: 'bump',
       message: 'Confirm bump',
@@ -158,7 +157,7 @@ co(function*() {
   } else if (bump !== toBump.releaseType) {
     console.log(`Recommended bump is ${formatToBump(toBump.releaseType)}.
 You chose ${formatToBump(bump)} instead.`);
-    const confirm = (yield inquirer.prompt({
+    const confirm = (await inquirer.prompt({
       type: 'confirm',
       name: 'c',
       message: 'Are you sure',
@@ -171,7 +170,7 @@ You chose ${formatToBump(bump)} instead.`);
   // Execute the tests
   if (!force) {
     console.log('Running the tests');
-    yield execNpm('run', 'test');
+    await execNpm('run', 'test');
   } else {
     debug('skipping tests (--force)');
   }
@@ -183,38 +182,38 @@ You chose ${formatToBump(bump)} instead.`);
   const versionReg = /"version": "[^"]+"/;
 
   debug('update version in package.json');
-  let packData = yield fs.readFile(packageJSONPath, 'utf8');
+  let packData = await fs.readFile(packageJSONPath, 'utf8');
   packData = packData.replace(versionReg, newVersionString);
-  yield fs.writeFile(packageJSONPath, packData);
+  await fs.writeFile(packageJSONPath, packData);
 
   if (hasPackageLock) {
     debug('update version in package-lock.json');
-    let packLockData = yield fs.readFile(packageLockPath, 'utf8');
+    let packLockData = await fs.readFile(packageLockPath, 'utf8');
     packLockData = packLockData.replace(versionReg, newVersionString);
-    yield fs.writeFile(packageLockPath, packLockData);
+    await fs.writeFile(packageLockPath, packLockData);
   }
 
   // Add/update changelog
-  yield updateHistory();
+  await updateHistory();
 
   // Commit the update and tag it
   const filesToAdd = ['package.json', 'History.md'];
   if (hasPackageLock) {
     filesToAdd.push('package-lock.json');
   }
-  yield execa('git', ['add', ...filesToAdd]);
-  yield execa('git', ['commit', '-m', newVersion]);
-  yield execa('git', ['tag', '-a', `v${newVersion}`, '-m', `v${newVersion}`]);
+  await execa('git', ['add', ...filesToAdd]);
+  await execa('git', ['commit', '-m', newVersion]);
+  await execa('git', ['tag', '-a', `v${newVersion}`, '-m', `v${newVersion}`]);
 
   // Publish package
   console.log('Publishing package');
   var publishOutput;
   try {
-    publishOutput = yield execNpm('publish');
+    publishOutput = await execNpm('publish');
   } catch (e) {
     errorLog('npm publish failed, rolling back commits and tags');
-    yield execa('git', ['tag', '-d', `v${newVersion}`]);
-    yield execa('git', ['reset', '--hard', 'HEAD~1']);
+    await execa('git', ['tag', '-d', `v${newVersion}`]);
+    await execa('git', ['reset', '--hard', 'HEAD~1']);
     log(e);
     return;
   }
@@ -224,7 +223,7 @@ You chose ${formatToBump(bump)} instead.`);
   var packages;
   try {
     packages = JSON.parse(
-      yield execNpmStdout('access', 'ls-packages', `${org}:developers`)
+      await execNpmStdout('access', 'ls-packages', `${org}:developers`)
     );
   } catch (e) {
     errorLog(`{${ERROR_COLOR} This team may not exist (${org}:developers)`);
@@ -233,7 +232,7 @@ You chose ${formatToBump(bump)} instead.`);
   if (!packages || !packages[packageName]) {
     console.log('Adding to organization');
     try {
-      var addAdmins = yield execNpmStdout(
+      var addAdmins = await execNpmStdout(
         'access',
         'grant',
         'read-write',
@@ -249,7 +248,7 @@ Check that you are an admin on ${org} or ask the first author to run {bold.black
   // Push to GitHub
   console.log('Pushing to GitHub');
   try {
-    log(yield execa('git', ['push', '--follow-tags']));
+    log(await execa('git', ['push', '--follow-tags']));
   } catch (e) {
     errorLog(e);
     errorLog(
@@ -259,18 +258,19 @@ Check that you are an admin on ${org} or ask the first author to run {bold.black
 
   // Documentation
   if (program.doc) {
-    yield generateDoc(true);
+    await generateDoc(true);
   }
-}).catch(function (err) {
+})().catch(function (err) {
   errorLog(err);
+  process.exitCode = 1;
 });
 
 function execNpm(...args) {
   return execa('npm', args);
 }
 
-function* execNpmStdout(...args) {
-  const { stdout } = yield execNpm(...args);
+async function execNpmStdout(...args) {
+  const { stdout } = await execNpm(...args);
   return stdout;
 }
 
@@ -300,30 +300,30 @@ function getRecommendedBump() {
   });
 }
 
-function* updateHistory() {
+async function updateHistory() {
   const HISTORY_FILE = 'History.md';
   const changelogOptions = {
     preset: 'angular',
     releaseCount: 1
   };
-  if (yield fs.exists(HISTORY_FILE)) {
+  if (await fs.exists(HISTORY_FILE)) {
     // File exists. Append latest version to current history.
-    const newHistory = yield createChangelog(changelogOptions);
+    const newHistory = await createChangelog(changelogOptions);
     if (newHistory.length === 0) {
       errorLog('No history to write. There must be a problem.');
       return;
     }
-    const currentHistory = yield fs.readFile(HISTORY_FILE);
+    const currentHistory = await fs.readFile(HISTORY_FILE);
     const concat = Buffer.concat(
       [newHistory, currentHistory],
       newHistory.length + currentHistory.length
     );
-    yield fs.writeFile(HISTORY_FILE, concat);
+    await fs.writeFile(HISTORY_FILE, concat);
   } else {
     // File does not exist. Generate full history.
     changelogOptions.releaseCount = 0;
-    const history = yield createChangelog(changelogOptions);
-    yield fs.writeFile(HISTORY_FILE, history);
+    const history = await createChangelog(changelogOptions);
+    await fs.writeFile(HISTORY_FILE, history);
   }
 }
 
