@@ -1,3 +1,12 @@
+## [1.22.1](https://github.com/cheminfo/tools/compare/v1.22.0...v1.22.1) (2018-11-07)
+
+
+### Bug Fixes
+
+* do not publish docs if they were not built ([4eb1b5a](https://github.com/cheminfo/tools/commit/4eb1b5a))
+
+
+
 # [1.22.0](https://github.com/cheminfo/tools/compare/v1.21.1...v1.22.0) (2018-11-07)
 
 
