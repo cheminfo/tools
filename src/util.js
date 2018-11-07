@@ -8,7 +8,7 @@ const fs = require('fs-extra');
 
 const pack = require('../package.json');
 
-exports.checkLatestVersion = function*(force) {
+function* checkLatestVersion(force) {
   if (force) {
     debug('skipping version check (--force)');
     return false;
@@ -26,9 +26,17 @@ Please upgrade using the command: npm install -g cheminfo-tools`);
     debug('version is up-to-date');
     return false;
   }
-};
+}
 
-exports.getOrgFromPackage = function getOrgFromPackage(pkg) {
+function* detectTypedoc() {
+  return yield fs.exists('typedoc.config.js');
+}
+
+function* detectTypescript() {
+  return yield fs.exists('tsconfig.json');
+}
+
+function getOrgFromPackage(pkg) {
   try {
     let url;
     if (typeof pkg.repository === 'string') {
@@ -46,12 +54,17 @@ exports.getOrgFromPackage = function getOrgFromPackage(pkg) {
   } catch (e) {
     return null;
   }
-};
+}
 
-exports.detectTypescript = function*() {
-  return yield fs.exists('tsconfig.json');
-};
+function* getPackageJson() {
+  const pack = yield fs.readFile('package.json', 'utf8');
+  return JSON.parse(pack);
+}
 
-exports.detectTypedoc = function*() {
-  return yield fs.exists('typedoc.config.js');
+module.exports = {
+  checkLatestVersion,
+  detectTypedoc,
+  detectTypescript,
+  getOrgFromPackage,
+  getPackageJson
 };
