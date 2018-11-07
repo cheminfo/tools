@@ -10,7 +10,7 @@ const touch = require('touch');
 
 const { detectTypescript, detectTypedoc, getPackageJson } = require('./util');
 
-module.exports = async function generateDoc(publish) {
+module.exports = async function generateDoc(pushToGithub) {
   const pack = await getPackageJson();
   let builtDocs = false;
   if (pack.scripts && pack.scripts['build-docs']) {
@@ -80,7 +80,7 @@ module.exports = async function generateDoc(publish) {
       }
     }
 
-    if (publish && builtDocs) {
+    if (pushToGithub && builtDocs) {
       await execa('git', ['add', 'docs']);
       await execa('git', ['commit', '-m', 'doc: rebuild docs [ci skip]']);
       await execa('git', ['push', 'origin', 'master']);

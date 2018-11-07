@@ -19,7 +19,7 @@ const force = program.force;
   const shouldStop = await util.checkLatestVersion(force);
   if (shouldStop) return;
 
-  await generateDoc(program.publish);
+  await generateDoc(program.push);
 })().catch(function (err) {
   console.error(err);
   process.exitCode = 1;
