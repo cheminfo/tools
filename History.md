@@ -1,3 +1,13 @@
+## [1.22.2](https://github.com/cheminfo/tools/compare/v1.22.1...v1.22.2) (2018-11-07)
+
+
+### Bug Fixes
+
+* add new line after exec logs ([ce3420e](https://github.com/cheminfo/tools/commit/ce3420e)), closes [#222](https://github.com/cheminfo/tools/issues/222)
+* correct documentation lib names ([4d80afa](https://github.com/cheminfo/tools/commit/4d80afa))
+
+
+
 ## [1.22.1](https://github.com/cheminfo/tools/compare/v1.22.0...v1.22.1) (2018-11-07)
 
 
