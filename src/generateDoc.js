@@ -23,7 +23,7 @@ module.exports = async function generateDoc(publish) {
     let wantsDoc = true;
     if (!hasDoc) {
       console.log('This project has no docs folder');
-      const docGenerator = isTypescript ? 'typedoc' : 'documentationjs';
+      const docGenerator = isTypescript ? 'TypeDoc' : 'documentation.js';
       wantsDoc = (await inquirer.prompt({
         type: 'confirm',
         name: 'c',
