@@ -79,11 +79,15 @@ module.exports = async function generateDoc(pushToGithub) {
         builtDocs = true;
       }
     }
+  }
 
-    if (pushToGithub && builtDocs) {
+  if (builtDocs) {
+    console.log('Successfully built docs');
+    if (pushToGithub) {
       await execa('git', ['add', 'docs']);
       await execa('git', ['commit', '-m', 'doc: rebuild docs [ci skip]']);
       await execa('git', ['push', 'origin', 'master']);
+      console.log('Committed and pushed to GitHub');
     }
   }
 };
