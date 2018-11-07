@@ -12,9 +12,11 @@ const { detectTypescript, detectTypedoc, getPackageJson } = require('./util');
 
 module.exports = async function generateDoc(publish) {
   const pack = await getPackageJson();
+  let builtDocs = false;
   if (pack.scripts && pack.scripts['build-docs']) {
     console.log('Running build-docs npm script to generate documentation');
     await execa('npm', ['run', 'build-docs']);
+    builtDocs = true;
   } else {
     const hasDoc = await fs.exists('docs');
     const isTypescript = await detectTypescript();
@@ -48,6 +50,7 @@ module.exports = async function generateDoc(publish) {
         }
         await execa(documentationExecPath, typedocArgs);
         await touch('docs/.nojekyll');
+        builtDocs = true;
       } else {
         const documentationLibLink = terminalLink(
           'documentation',
@@ -73,10 +76,11 @@ module.exports = async function generateDoc(publish) {
           '--sort-order',
           'alpha'
         ]);
+        builtDocs = true;
       }
     }
 
-    if (publish) {
+    if (publish && builtDocs) {
       await execa('git', ['add', 'docs']);
       await execa('git', ['commit', '-m', 'doc: rebuild docs [ci skip]']);
       await execa('git', ['push', 'origin', 'master']);
