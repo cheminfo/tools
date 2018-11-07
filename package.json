@@ -29,14 +29,6 @@
     "url": "https://github.com/cheminfo/tools/issues"
   },
   "homepage": "https://github.com/cheminfo/tools",
-  "tabtab": {
-    "cheminfo": [
-      "build",
-      "doc",
-      "publish",
-      "generate"
-    ]
-  },
   "dependencies": {
     "@babel/core": "^7.1.5",
     "@babel/preset-env": "^7.1.5",
@@ -50,7 +42,6 @@
     "documentation": "^9.0.0-alpha.0",
     "execa": "^1.0.0",
     "fs-extra": "^7.0.0",
-    "generator-cheminfo": "^4.1.0",
     "ggit": "^2.4.6",
     "inquirer": "^6.2.0",
     "latest-version": "^4.0.0",
@@ -60,8 +51,7 @@
     "terser-webpack-plugin": "^1.1.0",
     "touch": "^3.1.0",
     "typedoc": "^0.13.0",
-    "webpack": "^4.25.1",
-    "yeoman-environment": "^2.3.4"
+    "webpack": "^4.25.1"
   },
   "devDependencies": {
     "eslint": "^5.8.0",
