@@ -1,6 +1,6 @@
 {
   "name": "cheminfo-tools",
-  "version": "1.22.2",
+  "version": "1.22.3",
   "description": "CLI tools to help cheminfo developers",
   "main": "src/index.js",
   "scripts": {

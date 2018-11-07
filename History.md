@@ -1,3 +1,12 @@
+## [1.22.3](https://github.com/cheminfo/tools/compare/v1.22.2...v1.22.3) (2018-11-07)
+
+
+### Bug Fixes
+
+* **docs:** honor the --push flag ([d5aa229](https://github.com/cheminfo/tools/commit/d5aa229))
+
+
+
 ## [1.22.2](https://github.com/cheminfo/tools/compare/v1.22.1...v1.22.2) (2018-11-07)
 
 
