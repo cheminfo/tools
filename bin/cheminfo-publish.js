@@ -277,10 +277,10 @@ async function execNpmStdout(...args) {
 function log(result) {
   if (!result) return;
   if (result.stdout) {
-    process.stdout.write(result.stdout);
+    process.stdout.write(`${result.stdout}\n`);
   }
   if (result.stderr) {
-    process.stderr.write(result.stderr);
+    process.stderr.write(`${result.stderr}\n`);
   }
 }
 
