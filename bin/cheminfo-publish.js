@@ -25,7 +25,7 @@ program
   .option('-b, --bump <bump>', 'kind of version bump')
   .option('-o, --org <org>', 'organization')
   .option('-f, --force', 'allows to skip some steps')
-  .option('-D, --no-doc', 'do not generate and publish documentation');
+  .option('-D, --no-docs', 'do not generate and publish documentation');
 
 program.parse(process.argv);
 
@@ -36,7 +36,7 @@ This will skip the following steps:
 - Run tests
 `;
 
-(async ()=> {
+(async () => {
   debug('start publish');
 
   if (force) {
@@ -257,7 +257,7 @@ Check that you are an admin on ${org} or ask the first author to run {bold.black
   }
 
   // Documentation
-  if (program.doc) {
+  if (program.docs) {
     await generateDoc(true);
   }
 })().catch(function (err) {

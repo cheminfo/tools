@@ -9,7 +9,7 @@ const util = require('../src/util');
 
 program
   .option('-f, --force', 'allows to bypass some checks')
-  .option('-p, --publish', 'publish the doc to gh-pages');
+  .option('-p, --push', 'push the docs folder to GitHub');
 
 program.parse(process.argv);
 

@@ -28,14 +28,14 @@ Make a browser build using webpack
 - **--no-source-map**: disable generation of source map only
 - **-v, --verbose**: output warnings if any
 
-### doc
+### docs
 
-Generate and/or publish documentation.  
-It will be generated in the `doc` directory.
+Generate and push documentation.  
+It will be generated in the `docs` directory.
 
 #### options
 
-- **-p, --publish**: publish the generated doc to gh-pages
+- **-p, --push**: push the generated docs folder to GitHub
 
 ### publish
 
