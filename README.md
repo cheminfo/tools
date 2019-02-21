@@ -42,9 +42,13 @@ Test, bump and publish a project on npm.
 You need to run the command from the root of the project's directory.
 It is **only** for npm-only packages. Please use the GRM for browser packages.
 
-Usage: `cheminfo publish -o <org> -b <version>`
+- **-b, --bump <bump>**  kind of version bump (optional, they are determined automatically and you will be prompted)
+- **-o, --org <org>**    organization (optional, will be determined automatically)
+- **-f, --force**        allows to skip some steps
+- **-D, --no-docs**      do not generate and publish documentation
+- **-h, --help**         output usage information
 
-`-o` and `-b` are optional values and are determined automaticaly.
+
 
 #### Example
 
