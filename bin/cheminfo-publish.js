@@ -101,16 +101,6 @@ This will skip the following steps:
   if (org === 'cheminfo-js') {
     org = 'cheminfo';
   }
-  const adminList = JSON.parse(
-    await execNpmStdout('team', 'ls', `${org}:developers`)
-  );
-  debug('npm org developers: %s', adminList);
-  if (adminList.indexOf(name) === -1) {
-    errorLog(
-      `Org (${org}) does not exist or you (${name}) are not allowed to publish in it`
-    );
-    return;
-  }
 
   // Get the name of the package
   const packageName = packageJSON.name;
