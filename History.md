@@ -1,3 +1,12 @@
+## [1.22.5](https://github.com/cheminfo/tools/compare/v1.22.4...v1.22.5) (2019-03-22)
+
+
+### Bug Fixes
+
+* remove team ls check ([3f7b15f](https://github.com/cheminfo/tools/commit/3f7b15f))
+
+
+
 ## [1.22.4](https://github.com/cheminfo/tools/compare/v1.22.3...v1.22.4) (2018-11-07)
 
 
