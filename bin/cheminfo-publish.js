@@ -8,7 +8,7 @@ const debug = require('debug')('cheminfo:publish');
 const program = require('commander');
 const changelog = require('conventional-changelog');
 const execa = require('execa');
-const concat = require('concat-stream');
+const concatStream = require('concat-stream');
 const fs = require('fs-extra');
 const git = require('ggit');
 const inquirer = require('inquirer');
@@ -320,8 +320,8 @@ async function updateHistory() {
 function createChangelog(options) {
   return new Promise((resolve, reject) => {
     const changelogStream = changelog(options);
-    const concatStream = concat(resolve);
+    const concatedStream = concatStream(resolve);
     changelogStream.on('error', reject);
-    changelogStream.pipe(concatStream);
+    changelogStream.pipe(concatedStream);
   });
 }
