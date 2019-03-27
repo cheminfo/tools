@@ -98,6 +98,6 @@ function getOptions(pack) {
     cheminfo: { docs = {} }
   } = pack;
   return {
-    entry: docs.tsEntry || 'src/index.ts'
+    tsEntry: docs.tsEntry || 'src/index.ts'
   };
 }
