@@ -62,6 +62,7 @@ async function getPackageJson() {
   if (!parsed.cheminfo) {
     parsed.cheminfo = {};
   }
+  return parsed;
 }
 
 module.exports = {
