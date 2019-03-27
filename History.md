@@ -1,3 +1,12 @@
+## [1.23.2](https://github.com/cheminfo/tools/compare/v1.23.1...v1.23.2) (2019-03-27)
+
+
+### Bug Fixes
+
+* correctly read tsEntry option ([0e9250d](https://github.com/cheminfo/tools/commit/0e9250d))
+
+
+
 ## [1.23.1](https://github.com/cheminfo/tools/compare/v1.23.0...v1.23.1) (2019-03-27)
 
 
