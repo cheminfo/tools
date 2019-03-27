@@ -1,3 +1,12 @@
+# [1.23.0](https://github.com/cheminfo/tools/compare/v1.22.5...v1.23.0) (2019-03-27)
+
+
+### Features
+
+* add tsEntry option to docs ([204be42](https://github.com/cheminfo/tools/commit/204be42))
+
+
+
 ## [1.22.5](https://github.com/cheminfo/tools/compare/v1.22.4...v1.22.5) (2019-03-22)
 
 
