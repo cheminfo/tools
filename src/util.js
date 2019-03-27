@@ -58,7 +58,10 @@ function getOrgFromPackage(pkg) {
 
 async function getPackageJson() {
   const pack = await fs.readFile('package.json', 'utf8');
-  return JSON.parse(pack);
+  const parsed = JSON.parse(pack);
+  if (!parsed.cheminfo) {
+    parsed.cheminfo = {};
+  }
 }
 
 module.exports = {

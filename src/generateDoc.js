@@ -12,6 +12,7 @@ const { detectTypescript, detectTypedoc, getPackageJson } = require('./util');
 
 module.exports = async function generateDoc(pushToGithub) {
   const pack = await getPackageJson();
+  const opts = getOptions(pack);
   let builtDocs = false;
   if (pack.scripts && pack.scripts['build-docs']) {
     console.log('Running build-docs npm script to generate documentation');
@@ -40,7 +41,7 @@ module.exports = async function generateDoc(pushToGithub) {
           __dirname,
           '../node_modules/.bin/typedoc'
         );
-        const typedocArgs = ['--out', 'docs', 'src/index.ts'];
+        const typedocArgs = ['--out', 'docs', opts.tsEntry];
         if (hasTypedocConfig) {
           typedocArgs.push('--options', 'typedoc.config.js');
         } else {
@@ -91,3 +92,12 @@ module.exports = async function generateDoc(pushToGithub) {
     }
   }
 };
+
+function getOptions(pack) {
+  const {
+    cheminfo: { docs = {} }
+  } = pack;
+  return {
+    entry: docs.tsEntry || 'src/index.ts'
+  };
+}
