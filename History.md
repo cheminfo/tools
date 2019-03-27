@@ -1,3 +1,12 @@
+## [1.23.1](https://github.com/cheminfo/tools/compare/v1.23.0...v1.23.1) (2019-03-27)
+
+
+### Bug Fixes
+
+* return package object ([e481e07](https://github.com/cheminfo/tools/commit/e481e07))
+
+
+
 # [1.23.0](https://github.com/cheminfo/tools/compare/v1.22.5...v1.23.0) (2019-03-27)
 
 
