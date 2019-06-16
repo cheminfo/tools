@@ -55,10 +55,10 @@ var webpackConfig = [
                 {
                   targets: {
                     browsers: [
-                      'chrome >= 54',
+                      'last 10 chrome versions',
                       'last 2 edge versions',
-                      'last 1 safari version',
-                      'last 1 firefox version'
+                      'last 2 safari versions',
+                      'last 2 firefox version'
                     ]
                   }
                 }
