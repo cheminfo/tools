@@ -54,7 +54,6 @@ This will skip the following steps:
 
 (async () => {
   debug('start publish');
-  console.log(program);
   if (force) {
     const answer = await inquirer.prompt([
       {
