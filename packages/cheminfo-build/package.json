@@ -1,0 +1,35 @@
+{
+  "name": "cheminfo-build",
+  "version": "0.0.0",
+  "description": "CLI tool to build ChemInfo packages",
+  "keywords": [],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "bin": "./bin/cheminfo-build.js",
+  "author": "Michaël Zasso",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cheminfo/tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cheminfo/tools/issues"
+  },
+  "homepage": "https://github.com/cheminfo/tools",
+  "dependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "rollup": "^1.16.3",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.0.1",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.0.0",
+    "yargs": "^13.2.4"
+  }
+}
