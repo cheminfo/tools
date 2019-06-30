@@ -123,7 +123,6 @@ async function build() {
       file: path.resolve(cwd, program.out, `${filename}.min.js`),
       format: 'umd',
       name: name,
-      banner: banner.getMinBanner(pkg),
       sourcemap: program.sourceMap
     });
   }

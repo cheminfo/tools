@@ -18,14 +18,6 @@ function getMainBanner(pkg) {
   return `${result} */`;
 }
 
-function getMinBanner(pkg) {
-  let result = `/** ${pkg.name}@${pkg.version}`;
-  if (pkg.license) result += `, ${pkg.license} licensed`;
-  if (pkg.homepage) result += `. ${pkg.homepage}`;
-  return `${result} */`;
-}
-
 module.exports = {
-  getMainBanner,
-  getMinBanner
+  getMainBanner
 };
