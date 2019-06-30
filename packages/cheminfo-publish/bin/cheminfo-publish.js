@@ -5,7 +5,7 @@
 const path = require('path');
 
 const debug = require('debug')('cheminfo:publish');
-const program = require('commander');
+const yargs = require('yargs');
 const changelog = require('conventional-changelog');
 const execa = require('execa');
 const concatStream = require('concat-stream');
@@ -15,30 +15,46 @@ const inquirer = require('inquirer');
 const recommendedBump = require('conventional-recommended-bump');
 const semver = require('semver');
 const chalk = require('chalk');
+const terminalLink = require('terminal-link');
 
 const ERROR_COLOR = 'rgb(255,99,99)';
 
 const generateDoc = require('../src/generateDoc');
 const util = require('../src/util');
 
-program
-  .option('-b, --bump <bump>', 'kind of version bump')
-  .option('-o, --org <org>', 'organization')
-  .option('-f, --force', 'allows to skip some steps')
-  .option('-D, --no-docs', 'do not generate and publish documentation');
-
-program.parse(process.argv);
+const program = yargs
+  .option('bump', {
+    alias: 'b',
+    requiresArg: true,
+    describe: 'Kind of version bump'
+  })
+  .option('org', {
+    alias: 'o',
+    requiresArg: true,
+    describe: 'GitHub organization'
+  })
+  .option('force', {
+    alias: 'f',
+    describe: 'Allows to skip some steps'
+  })
+  .option('docs', {
+    alias: 'd',
+    default: true,
+    describe: 'Generate and publish documentation'
+  })
+  .strict()
+  .help().argv;
 
 const force = program.force;
 const forceMessage = `Are you sure you want to force the publication?
 This will skip the following steps:
-- Check that cheminfo-tools is up-to-date
+- Check that cheminfo-publish is up-to-date
 - Run tests
 `;
 
 (async () => {
   debug('start publish');
-
+  console.log(program);
   if (force) {
     const answer = await inquirer.prompt([
       {
@@ -230,8 +246,12 @@ You chose ${formatToBump(bump)} instead.`);
       );
       log(addAdmins);
     } catch (e) {
-      console.log(chalk`{${ERROR_COLOR} You (${name}) are not allowed to grant permissions on this package.
-Check that you are an admin on ${org} or ask the first author to run {bold.black.bgRgb(252,141,141) "npm access grant read-write ${org}:developers ${packageName}"}}`);
+      const link = terminalLink(
+        'npm team config',
+        `https://www.npmjs.com/settings/${org}/teams/team/developers/access`
+      );
+      console.log(chalk`{${ERROR_COLOR} Could not add the package to npm organization.
+Please go to ${link} and add {bold.black.bgRgb(252,141,141) ${packageName}} to the team.}`);
     }
   }
 
@@ -242,7 +262,7 @@ Check that you are an admin on ${org} or ask the first author to run {bold.black
   } catch (e) {
     errorLog(e);
     errorLog(
-      'Command "git push --follow-tags" failed.\nYou need to resolve the problem manually'
+      'Command "git push --follow-tags" failed.\nYou need to resolve the problem manually.'
     );
   }
 
@@ -250,7 +270,7 @@ Check that you are an admin on ${org} or ask the first author to run {bold.black
   if (program.docs) {
     await generateDoc(true);
   }
-})().catch(function (err) {
+})().catch(function(err) {
   errorLog(err);
   process.exitCode = 1;
 });
@@ -280,7 +300,7 @@ function errorLog(err) {
 
 function getRecommendedBump() {
   return new Promise((resolve, reject) => {
-    recommendedBump({ preset: 'angular' }, function (err, result) {
+    recommendedBump({ preset: 'angular' }, function(err, result) {
       if (err) {
         reject(err);
       } else {

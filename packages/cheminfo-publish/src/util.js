@@ -15,12 +15,12 @@ async function checkLatestVersion(force) {
   }
 
   debug('getting latest version');
-  const latestVersion = await getLatestVersion('cheminfo-tools');
+  const latestVersion = await getLatestVersion('cheminfo-publish');
   const thisVersion = pack.version;
   if (semver.gt(latestVersion, thisVersion)) {
     debug('version is obsolete');
-    console.error(`Your version of cheminfo-tools (${thisVersion}) is obsolete. Latest is ${latestVersion}.
-Please upgrade using the command: npm install -g cheminfo-tools`);
+    console.error(`Your version of cheminfo-publish (${thisVersion}) is obsolete. Latest is ${latestVersion}.
+Please upgrade using the command: npm install -g cheminfo-publish`);
     return true;
   } else {
     debug('version is up-to-date');
