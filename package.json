@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "prepare": "npm run bootstrap"
+    "prepare": "npm run bootstrap",
+    "publish": "lerna publish"
   },
   "author": "Michaël Zasso",
   "contributors": [
