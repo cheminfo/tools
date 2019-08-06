@@ -29,7 +29,7 @@ module.exports = async function generateDoc(pushToGithub) {
         type: 'confirm',
         name: 'c',
         message: `Do you want to create it using ${docGenerator}?`,
-        default: false
+        default: false,
       })).c;
     }
     if (wantsDoc) {
@@ -39,14 +39,19 @@ module.exports = async function generateDoc(pushToGithub) {
         console.log('generating docs for typescript project with', typedocLink);
         const documentationExecPath = path.resolve(
           __dirname,
-          '../node_modules/.bin/typedoc'
+          '../node_modules/.bin/typedoc',
         );
-        const typedocArgs = ['--out', 'docs', opts.tsEntry];
+        const typedocArgs = [
+          '--ignoreCompilerErrors',
+          '--out',
+          'docs',
+          opts.tsEntry,
+        ];
         if (hasTypedocConfig) {
           typedocArgs.push('--options', 'typedoc.config.js');
         } else {
           console.log(
-            'you can customize the output by writing a typedoc.config.js file'
+            'you can customize the output by writing a typedoc.config.js file',
           );
         }
         await execa(documentationExecPath, typedocArgs);
@@ -55,13 +60,13 @@ module.exports = async function generateDoc(pushToGithub) {
       } else {
         const documentationLibLink = terminalLink(
           'documentation',
-          'https://github.com/documentationjs/documentation'
+          'https://github.com/documentationjs/documentation',
         );
         console.log('generating js docs with', documentationLibLink);
 
         const documentationExecPath = path.resolve(
           __dirname,
-          '../node_modules/.bin/documentation'
+          '../node_modules/.bin/documentation',
         );
         // eslint-disable-next-line import/no-dynamic-require
         const pkg = require(`${process.cwd()}/package.json`);
@@ -75,7 +80,7 @@ module.exports = async function generateDoc(pushToGithub) {
           '--format',
           'html',
           '--sort-order',
-          'alpha'
+          'alpha',
         ]);
         builtDocs = true;
       }
@@ -95,9 +100,9 @@ module.exports = async function generateDoc(pushToGithub) {
 
 function getOptions(pack) {
   const {
-    cheminfo: { docs = {} }
+    cheminfo: { docs = {} },
   } = pack;
   return {
-    tsEntry: docs.tsEntry || 'src/index.ts'
+    tsEntry: docs.tsEntry || 'src/index.ts',
   };
 }
