@@ -19,5 +19,5 @@ function getMainBanner(pkg) {
 }
 
 module.exports = {
-  getMainBanner
+  getMainBanner,
 };

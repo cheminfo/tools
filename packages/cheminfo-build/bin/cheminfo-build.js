@@ -20,36 +20,36 @@ const program = yargs
     alias: 'c',
     describe: 'Working directory',
     requiresArg: true,
-    default: process.cwd()
+    default: process.cwd(),
   })
   .option('out', {
     alias: 'o',
     describe: 'Output directory',
     requiresArg: true,
-    default: 'dist'
+    default: 'dist',
   })
   .option('out-name', {
     alias: 'n',
     describe: 'Name of the output file',
-    requiresArg: true
+    requiresArg: true,
   })
   .option('root', {
     alias: 'r',
     describe: 'Root name of the library',
-    requiresArg: true
+    requiresArg: true,
   })
   .option('entry', {
     alias: 'e',
     describe: 'Library entry point',
-    requiresArg: true
+    requiresArg: true,
   })
   .option('minify', {
     default: true,
-    describe: 'Generate a .min.js file'
+    describe: 'Generate a .min.js file',
   })
   .option('source-map', {
     default: true,
-    describe: 'Generate source maps'
+    describe: 'Generate source maps',
   })
   .strict()
   .help().argv;
@@ -87,20 +87,20 @@ function getInputOptions(minify = false) {
                   'last 10 chrome versions',
                   'last 2 edge versions',
                   'last 2 safari versions',
-                  'last 2 firefox version'
-                ]
-              }
-            }
-          ]
-        ]
-      })
-    ]
+                  'last 2 firefox version',
+                ],
+              },
+            },
+          ],
+        ],
+      }),
+    ],
   };
   if (minify) {
     options.plugins.push(
       terser({
-        sourcemap: program.sourceMap
-      })
+        sourcemap: program.sourceMap,
+      }),
     );
   }
   return options;
@@ -114,7 +114,7 @@ async function build() {
     format: 'umd',
     name: name,
     banner: banner.getMainBanner(pkg),
-    sourcemap: program.sourceMap
+    sourcemap: program.sourceMap,
   });
   if (program.minify) {
     console.log('building minified bundle...');
@@ -123,7 +123,7 @@ async function build() {
       file: path.resolve(cwd, program.out, `${filename}.min.js`),
       format: 'umd',
       name: name,
-      sourcemap: program.sourceMap
+      sourcemap: program.sourceMap,
     });
   }
 }

@@ -70,5 +70,5 @@ module.exports = {
   detectTypedoc,
   detectTypescript,
   getOrgFromPackage,
-  getPackageJson
+  getPackageJson,
 };

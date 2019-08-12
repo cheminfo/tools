@@ -26,6 +26,6 @@
   },
   "homepage": "https://github.com/cheminfo/tools",
   "dependencies": {
-    "lerna": "^3.15.0"
+    "lerna": "^3.16.4"
   }
 }

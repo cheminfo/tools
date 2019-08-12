@@ -2,6 +2,7 @@
 
 'use strict';
 
+const cp = require('child_process');
 const path = require('path');
 
 const debug = require('debug')('cheminfo:publish');
@@ -26,21 +27,21 @@ const program = yargs
   .option('bump', {
     alias: 'b',
     requiresArg: true,
-    describe: 'Kind of version bump'
+    describe: 'Kind of version bump',
   })
   .option('org', {
     alias: 'o',
     requiresArg: true,
-    describe: 'GitHub organization'
+    describe: 'GitHub organization',
   })
   .option('force', {
     alias: 'f',
-    describe: 'Allows to skip some steps'
+    describe: 'Allows to skip some steps',
   })
   .option('docs', {
     alias: 'd',
     default: true,
-    describe: 'Generate and publish documentation'
+    describe: 'Generate and publish documentation',
   })
   .strict()
   .help().argv;
@@ -60,8 +61,8 @@ This will skip the following steps:
         type: 'confirm',
         name: 'ok',
         message: forceMessage,
-        default: false
-      }
+        default: false,
+      },
     ]);
     if (!answer.ok) {
       debug('--force was not confirmed. Bailing out...');
@@ -86,7 +87,7 @@ This will skip the following steps:
     return;
   }
 
-  await git.exec('git pull --rebase');
+  cp.execFileSync('git', ['pull', '--rebase']);
 
   // Get npm username
   const name = await execNpmStdout('whoami');
@@ -107,7 +108,7 @@ This will skip the following steps:
       type: 'list',
       message: 'Choose an organization',
       name: 'org',
-      choices: ['mljs', 'cheminfo']
+      choices: ['mljs', 'cheminfo'],
     })).org;
   }
   debug('npm org: %s', org);
@@ -123,7 +124,7 @@ This will skip the following steps:
   const bumpVersion = {
     major: semver.inc(packageVersion, 'major'),
     minor: semver.inc(packageVersion, 'minor'),
-    patch: semver.inc(packageVersion, 'patch')
+    patch: semver.inc(packageVersion, 'patch'),
   };
   debug('package: %s', packageName);
   debug('current version: %s', packageVersion);
@@ -155,9 +156,9 @@ This will skip the following steps:
       choices: [
         { name: formatToBump('major'), value: 'major' },
         { name: formatToBump('minor'), value: 'minor' },
-        { name: formatToBump('patch'), value: 'patch' }
+        { name: formatToBump('patch'), value: 'patch' },
       ],
-      default: toBump.releaseType
+      default: toBump.releaseType,
     })).bump;
   } else if (bump !== toBump.releaseType) {
     console.log(`Recommended bump is ${formatToBump(toBump.releaseType)}.
@@ -166,7 +167,7 @@ You chose ${formatToBump(bump)} instead.`);
       type: 'confirm',
       name: 'c',
       message: 'Are you sure',
-      default: false
+      default: false,
     })).c;
     if (!confirm) return;
   }
@@ -228,7 +229,7 @@ You chose ${formatToBump(bump)} instead.`);
   var packages;
   try {
     packages = JSON.parse(
-      await execNpmStdout('access', 'ls-packages', `${org}:developers`)
+      await execNpmStdout('access', 'ls-packages', `${org}:developers`),
     );
   } catch (e) {
     errorLog(`{${ERROR_COLOR} This team may not exist (${org}:developers)`);
@@ -241,13 +242,13 @@ You chose ${formatToBump(bump)} instead.`);
         'access',
         'grant',
         'read-write',
-        `${org}:developers`
+        `${org}:developers`,
       );
       log(addAdmins);
     } catch (e) {
       const link = terminalLink(
         'npm team config',
-        `https://www.npmjs.com/settings/${org}/teams/team/developers/access`
+        `https://www.npmjs.com/settings/${org}/teams/team/developers/access`,
       );
       console.log(chalk`{${ERROR_COLOR} Could not add the package to npm organization.
 Please go to ${link} and add {bold.black.bgRgb(252,141,141) ${packageName}} to the team.}`);
@@ -261,7 +262,7 @@ Please go to ${link} and add {bold.black.bgRgb(252,141,141) ${packageName}} to t
   } catch (e) {
     errorLog(e);
     errorLog(
-      'Command "git push --follow-tags" failed.\nYou need to resolve the problem manually.'
+      'Command "git push --follow-tags" failed.\nYou need to resolve the problem manually.',
     );
   }
 
@@ -270,6 +271,7 @@ Please go to ${link} and add {bold.black.bgRgb(252,141,141) ${packageName}} to t
     await generateDoc(true);
   }
 })().catch(function(err) {
+  console.log(err);
   errorLog(err);
   process.exitCode = 1;
 });
@@ -313,7 +315,7 @@ async function updateHistory() {
   const HISTORY_FILE = 'History.md';
   const changelogOptions = {
     preset: 'angular',
-    releaseCount: 1
+    releaseCount: 1,
   };
   if (await fs.exists(HISTORY_FILE)) {
     // File exists. Append latest version to current history.
@@ -325,7 +327,7 @@ async function updateHistory() {
     const currentHistory = await fs.readFile(HISTORY_FILE);
     const concat = Buffer.concat(
       [newHistory, currentHistory],
-      newHistory.length + currentHistory.length
+      newHistory.length + currentHistory.length,
     );
     await fs.writeFile(HISTORY_FILE, concat);
   } else {
