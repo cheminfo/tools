@@ -104,12 +104,14 @@ This will skip the following steps:
     org = util.getOrgFromPackage(packageJSON);
   }
   if (!org) {
-    org = (await inquirer.prompt({
-      type: 'list',
-      message: 'Choose an organization',
-      name: 'org',
-      choices: ['mljs', 'cheminfo'],
-    })).org;
+    org = (
+      await inquirer.prompt({
+        type: 'list',
+        message: 'Choose an organization',
+        name: 'org',
+        choices: ['mljs', 'cheminfo'],
+      })
+    ).org;
   }
   debug('npm org: %s', org);
 
@@ -149,26 +151,30 @@ This will skip the following steps:
   if (!bump) {
     console.log(`${toBump.reason}`);
     console.log(`Recommended bump: ${formatToBump(toBump.releaseType)}`);
-    bump = (await inquirer.prompt({
-      type: 'list',
-      name: 'bump',
-      message: 'Confirm bump',
-      choices: [
-        { name: formatToBump('major'), value: 'major' },
-        { name: formatToBump('minor'), value: 'minor' },
-        { name: formatToBump('patch'), value: 'patch' },
-      ],
-      default: toBump.releaseType,
-    })).bump;
+    bump = (
+      await inquirer.prompt({
+        type: 'list',
+        name: 'bump',
+        message: 'Confirm bump',
+        choices: [
+          { name: formatToBump('major'), value: 'major' },
+          { name: formatToBump('minor'), value: 'minor' },
+          { name: formatToBump('patch'), value: 'patch' },
+        ],
+        default: toBump.releaseType,
+      })
+    ).bump;
   } else if (bump !== toBump.releaseType) {
     console.log(`Recommended bump is ${formatToBump(toBump.releaseType)}.
 You chose ${formatToBump(bump)} instead.`);
-    const confirm = (await inquirer.prompt({
-      type: 'confirm',
-      name: 'c',
-      message: 'Are you sure',
-      default: false,
-    })).c;
+    const confirm = (
+      await inquirer.prompt({
+        type: 'confirm',
+        name: 'c',
+        message: 'Are you sure',
+        default: false,
+      })
+    ).c;
     if (!confirm) return;
   }
   debug('selected bump: %s', bump);
@@ -211,11 +217,28 @@ You chose ${formatToBump(bump)} instead.`);
   await execa('git', ['commit', '-m', newVersion]);
   await execa('git', ['tag', '-a', `v${newVersion}`, '-m', `v${newVersion}`]);
 
+  // Check if 2FA code is needed
+  const twoFactor = await execNpm('profile', 'get', 'two-factor auth');
+  let twoFactorCode;
+  if (twoFactor.stdout.startsWith('auth-and-writes')) {
+    twoFactorCode = (
+      await inquirer.prompt({
+        type: 'input',
+        message: 'Enter your npm two-factor OTP code',
+        name: 'twofa',
+      })
+    ).twofa;
+  }
+
   // Publish package
   console.log('Publishing package');
   var publishOutput;
   try {
-    publishOutput = await execNpm('publish');
+    const args = ['publish'];
+    if (twoFactorCode) {
+      args.push('--otp', twoFactorCode);
+    }
+    publishOutput = await execNpm(...args);
   } catch (e) {
     errorLog('npm publish failed, rolling back commits and tags');
     await execa('git', ['tag', '-d', `v${newVersion}`]);

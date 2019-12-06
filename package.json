@@ -25,6 +25,13 @@
     "url": "https://github.com/cheminfo/tools/issues"
   },
   "homepage": "https://github.com/cheminfo/tools",
+  "prettier": {
+    "arrowParens": "always",
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "all"
+  },
   "dependencies": {
     "lerna": "^3.19.0"
   }
