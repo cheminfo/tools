@@ -56,7 +56,7 @@ const program = yargs
 
 var cwd = path.resolve(program.cwd);
 var pkg = tryPackage(cwd);
-var entryPoint = program.entry || pkg.main || 'index.js';
+var entryPoint = program.entry || pkg.module || pkg.main || 'index.js';
 
 var name = program.root || pkg.name;
 if (!name) {
