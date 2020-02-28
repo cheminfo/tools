@@ -78,6 +78,7 @@ function getInputOptions(minify = false) {
       resolve(),
       babel({
         babelrc: false,
+        configFile: false,
         presets: [
           [
             require.resolve('@babel/preset-env'),
