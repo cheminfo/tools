@@ -54,11 +54,11 @@ const program = yargs
   .strict()
   .help().argv;
 
-var cwd = path.resolve(program.cwd);
-var pkg = tryPackage(cwd);
-var entryPoint = program.entry || pkg.module || pkg.main || 'index.js';
+const cwd = path.resolve(program.cwd);
+const pkg = tryPackage(cwd);
+const entryPoint = program.entry || pkg.module || pkg.main || 'index.js';
 
-var name = program.root || pkg.name;
+let name = program.root || pkg.name;
 if (!name) {
   throw new Error('No name found');
 } else if (name.indexOf('-') > 0) {
@@ -67,13 +67,46 @@ if (!name) {
   });
 }
 
-var filename = program.outName || pkg.name || 'bundle';
+const filename = program.outName || pkg.name || 'bundle';
 
-function getInputOptions(minify = false) {
-  const options = {
+const { build = {} } = pkg.cheminfo;
+const { namedExports = {} } = build;
+
+runBuild().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
+
+async function runBuild() {
+  console.log('Building bundle...');
+  const bundle = await rollup.rollup(getInputOptions());
+  await bundle.write({
+    file: path.resolve(cwd, program.out, `${filename}.js`),
+    format: 'umd',
+    name: name,
+    banner: banner.getMainBanner(pkg),
+    sourcemap: program.sourceMap,
+  });
+  if (program.minify) {
+    console.log('Building minified bundle...');
+    const minifiedBundle = await rollup.rollup(
+      getInputOptions({ minify: true }),
+    );
+    await minifiedBundle.write({
+      file: path.resolve(cwd, program.out, `${filename}.min.js`),
+      format: 'umd',
+      name: name,
+      sourcemap: program.sourceMap,
+    });
+  }
+}
+
+function getInputOptions(options = {}) {
+  const { minify = false } = options;
+  const rollupOptions = {
     input: path.resolve(cwd, entryPoint),
     plugins: [
-      commonjs(),
+      commonjs({ namedExports }),
       json(),
       resolve(),
       babel({
@@ -98,47 +131,25 @@ function getInputOptions(minify = false) {
     ],
   };
   if (minify) {
-    options.plugins.push(
+    rollupOptions.plugins.push(
       terser({
         sourcemap: program.sourceMap,
       }),
     );
   }
-  return options;
+  return rollupOptions;
 }
-
-async function build() {
-  console.log('building bundle...');
-  const bundle = await rollup.rollup(getInputOptions());
-  await bundle.write({
-    file: path.resolve(cwd, program.out, `${filename}.js`),
-    format: 'umd',
-    name: name,
-    banner: banner.getMainBanner(pkg),
-    sourcemap: program.sourceMap,
-  });
-  if (program.minify) {
-    console.log('building minified bundle...');
-    const minifiedBundle = await rollup.rollup(getInputOptions(true));
-    await minifiedBundle.write({
-      file: path.resolve(cwd, program.out, `${filename}.min.js`),
-      format: 'umd',
-      name: name,
-      sourcemap: program.sourceMap,
-    });
-  }
-}
-
-build().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
 
 function tryPackage(cwd) {
-  var pkg = path.join(cwd, 'package.json');
+  const pkgPath = path.join(cwd, 'package.json');
   try {
-    return JSON.parse(fs.readFileSync(pkg, 'utf8'));
+    return {
+      cheminfo: {},
+      ...JSON.parse(fs.readFileSync(pkgPath, 'utf8')),
+    };
   } catch (e) {
-    return {};
+    return {
+      cheminfo: {},
+    };
   }
 }
