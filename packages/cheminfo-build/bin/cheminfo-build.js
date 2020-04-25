@@ -62,7 +62,7 @@ let name = program.root || pkg.name;
 if (!name) {
   throw new Error('No name found');
 } else if (name.indexOf('-') > 0) {
-  name = name.replace(/[.-](\w)?/g, function(_, x) {
+  name = name.replace(/[.-](\w)?/g, function (_, x) {
     return x ? x.toUpperCase() : '';
   });
 }
@@ -106,9 +106,9 @@ function getInputOptions(options = {}) {
   const rollupOptions = {
     input: path.resolve(cwd, entryPoint),
     plugins: [
+      resolve({ browser: true }),
       commonjs({ namedExports }),
       json(),
-      resolve(),
       babel({
         babelrc: false,
         configFile: false,
@@ -119,9 +119,8 @@ function getInputOptions(options = {}) {
               targets: {
                 browsers: [
                   'last 10 chrome versions',
-                  'last 2 edge versions',
                   'last 2 safari versions',
-                  'last 2 firefox version',
+                  'last 2 firefox versions',
                 ],
               },
             },
