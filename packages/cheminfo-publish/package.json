@@ -22,22 +22,22 @@
   },
   "homepage": "https://github.com/cheminfo/tools",
   "dependencies": {
-    "chalk": "^4.0.0",
+    "chalk": "^4.1.0",
     "concat-stream": "^2.0.0",
-    "conventional-changelog": "^3.1.18",
-    "conventional-recommended-bump": "6.0.5",
+    "conventional-changelog": "^3.1.21",
+    "conventional-recommended-bump": "6.0.9",
     "debug": "^4.1.1",
-    "documentation": "^12.3.0",
-    "execa": "^4.0.0",
-    "fs-extra": "^9.0.0",
+    "documentation": "^13.0.2",
+    "execa": "^4.0.3",
+    "fs-extra": "^9.0.1",
     "ggit": "^2.4.12",
-    "inquirer": "^7.1.0",
+    "inquirer": "^7.3.3",
     "latest-version": "^5.1.0",
     "parse-github-repo-url": "^1.4.1",
     "semver": "^7.3.2",
     "terminal-link": "^2.1.1",
     "touch": "^3.1.0",
-    "typedoc": "^0.17.4",
-    "yargs": "^15.3.1"
+    "typedoc": "^0.17.8",
+    "yargs": "^15.4.1"
   }
 }
