@@ -25,12 +25,14 @@ module.exports = async function generateDoc(pushToGithub) {
     if (!hasDoc) {
       console.log('This project has no docs folder');
       const docGenerator = isTypescript ? 'TypeDoc' : 'documentation.js';
-      wantsDoc = (await inquirer.prompt({
-        type: 'confirm',
-        name: 'c',
-        message: `Do you want to create it using ${docGenerator}?`,
-        default: false,
-      })).c;
+      wantsDoc = (
+        await inquirer.prompt({
+          type: 'confirm',
+          name: 'c',
+          message: `Do you want to create it using ${docGenerator}?`,
+          default: false,
+        })
+      ).c;
     }
     if (wantsDoc) {
       if (isTypescript) {
@@ -91,7 +93,7 @@ module.exports = async function generateDoc(pushToGithub) {
     console.log('Successfully built docs');
     if (pushToGithub) {
       await execa('git', ['add', 'docs']);
-      await execa('git', ['commit', '-m', 'doc: rebuild docs [ci skip]']);
+      await execa('git', ['commit', '-m', 'doc: rebuild docs']);
       await execa('git', ['push', 'origin', 'master']);
       console.log('Committed and pushed to GitHub');
     }
