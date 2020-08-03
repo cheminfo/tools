@@ -130,11 +130,7 @@ function getInputOptions(options = {}) {
     ],
   };
   if (minify) {
-    rollupOptions.plugins.push(
-      terser({
-        sourcemap: program.sourceMap,
-      }),
-    );
+    rollupOptions.plugins.push(terser());
   }
   return rollupOptions;
 }
