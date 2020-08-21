@@ -24,8 +24,8 @@
   "dependencies": {
     "chalk": "^4.1.0",
     "concat-stream": "^2.0.0",
-    "conventional-changelog": "^3.1.21",
-    "conventional-recommended-bump": "6.0.9",
+    "conventional-changelog": "^3.1.23",
+    "conventional-recommended-bump": "6.0.10",
     "debug": "^4.1.1",
     "documentation": "^13.0.2",
     "execa": "^4.0.3",
@@ -37,7 +37,7 @@
     "semver": "^7.3.2",
     "terminal-link": "^2.1.1",
     "touch": "^3.1.0",
-    "typedoc": "^0.17.8",
+    "typedoc": "^0.18.0",
     "yargs": "^15.4.1"
   }
 }
