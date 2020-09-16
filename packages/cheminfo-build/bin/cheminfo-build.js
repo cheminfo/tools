@@ -69,9 +69,6 @@ if (!name) {
 
 const filename = program.outName || pkg.name || 'bundle';
 
-const { build = {} } = pkg.cheminfo;
-const { namedExports = {} } = build;
-
 runBuild().catch((e) => {
   console.error(e);
   process.exit(1);
@@ -107,7 +104,7 @@ function getInputOptions(options = {}) {
     input: path.resolve(cwd, entryPoint),
     plugins: [
       nodeResolve({ browser: true }),
-      commonjs({ namedExports }),
+      commonjs(),
       json(),
       babel({
         babelrc: false,
