@@ -22,13 +22,6 @@ Make a browser build using Rollup.
 - `--no-minify`: Disable generation of a .min.js file.
 - `--no-source-map`: Disable generation of source maps.
 
-#### configuration
-
-The following options can be set in the `package.json`'s `cheminfo.build` object:
-
-- `namedExports`: Object mapping named exports for CommonJS modules that Rollup doesn't automatically understand.
-  See https://github.com/rollup/plugins/tree/master/packages/commonjs#custom-named-exports.
-
 ### `cheminfo-publish`
 
 ```console
