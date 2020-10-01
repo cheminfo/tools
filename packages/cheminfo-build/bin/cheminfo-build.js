@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 
 const rollup = require('rollup');
-const babel = require('rollup-plugin-babel');
+const { babel } = require('@rollup/plugin-babel');
 const commonjs = require('@rollup/plugin-commonjs');
 const json = require('@rollup/plugin-json');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
@@ -107,6 +107,7 @@ function getInputOptions(options = {}) {
       commonjs(),
       json(),
       babel({
+        babelHelpers: 'bundled',
         babelrc: false,
         configFile: false,
         presets: [
