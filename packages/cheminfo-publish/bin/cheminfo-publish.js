@@ -13,6 +13,7 @@ const concatStream = require('concat-stream');
 const fs = require('fs-extra');
 const git = require('ggit');
 const inquirer = require('inquirer');
+const conventionalCommits = require('conventional-changelog-conventionalcommits');
 const recommendedBump = require('conventional-recommended-bump');
 const semver = require('semver');
 const chalk = require('chalk');
@@ -165,8 +166,11 @@ This will skip the following steps:
       })
     ).bump;
   } else if (bump !== toBump.releaseType) {
-    console.log(`Recommended bump is ${formatToBump(toBump.releaseType)}.
-You chose ${formatToBump(bump)} instead.`);
+    console.log(
+      `Recommended bump is ${formatToBump(
+        toBump.releaseType,
+      )}. You chose ${formatToBump(bump)} instead.`,
+    );
     const confirm = (
       await inquirer.prompt({
         type: 'confirm',
@@ -206,10 +210,10 @@ You chose ${formatToBump(bump)} instead.`);
   }
 
   // Add/update changelog
-  await updateHistory();
+  const historyFileName = await updateHistory();
 
   // Commit the update and tag it
-  const filesToAdd = ['package.json', 'History.md'];
+  const filesToAdd = ['package.json', historyFileName];
   if (hasPackageLock) {
     filesToAdd.push('package-lock.json');
   }
@@ -273,8 +277,9 @@ You chose ${formatToBump(bump)} instead.`);
         'npm team config',
         `https://www.npmjs.com/settings/${org}/teams/team/developers/access`,
       );
-      console.log(chalk`{${ERROR_COLOR} Could not add the package to npm organization.
-Please go to ${link} and add {bold.black.bgRgb(252,141,141) ${packageName}} to the team.}`);
+      console.log(
+        chalk`{${ERROR_COLOR} Could not add the package to npm organization. Please go to ${link} and add {bold.black.bgRgb(252,141,141) ${packageName}} to the team.}`,
+      );
     }
   }
 
@@ -293,7 +298,7 @@ Please go to ${link} and add {bold.black.bgRgb(252,141,141) ${packageName}} to t
   if (program.docs) {
     await generateDoc(true);
   }
-})().catch(function(err) {
+})().catch(function (err) {
   console.log(err);
   errorLog(err);
   process.exitCode = 1;
@@ -324,7 +329,7 @@ function errorLog(err) {
 
 function getRecommendedBump() {
   return new Promise((resolve, reject) => {
-    recommendedBump({ preset: 'angular' }, function(err, result) {
+    recommendedBump({ preset: 'angular' }, function (err, result) {
       if (err) {
         reject(err);
       } else {
@@ -335,9 +340,13 @@ function getRecommendedBump() {
 }
 
 async function updateHistory() {
-  const HISTORY_FILE = 'History.md';
+  let HISTORY_FILE = 'CHANGELOG.md';
+  if (await fs.exists('History.md')) {
+    HISTORY_FILE = 'History.md';
+  }
+
   const changelogOptions = {
-    preset: 'angular',
+    config: conventionalCommits(),
     releaseCount: 1,
   };
   if (await fs.exists(HISTORY_FILE)) {
@@ -359,6 +368,8 @@ async function updateHistory() {
     const history = await createChangelog(changelogOptions);
     await fs.writeFile(HISTORY_FILE, history);
   }
+
+  return HISTORY_FILE;
 }
 
 function createChangelog(options) {
