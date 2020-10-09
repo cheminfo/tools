@@ -21,6 +21,7 @@ const terminalLink = require('terminal-link');
 
 const ERROR_COLOR = 'rgb(255,99,99)';
 
+const migrate = require('../src/migrate');
 const generateDoc = require('../src/generateDoc');
 const util = require('../src/util');
 
@@ -43,6 +44,11 @@ const program = yargs
     alias: 'd',
     default: true,
     describe: 'Generate and publish documentation',
+  })
+  .option('migrate', {
+    boolean: true,
+    default: false,
+    describe: 'Migrate release to GitHub actions',
   })
   .strict()
   .help().argv;
@@ -297,6 +303,13 @@ This will skip the following steps:
   // Documentation
   if (program.docs) {
     await generateDoc(true);
+  }
+
+  if (program.migrate) {
+    migrate();
+    console.log(
+      chalk`{${ERROR_COLOR} Migration branch created and pushed. Now create a pull request and merge it!}`,
+    );
   }
 })().catch(function (err) {
   console.log(err);

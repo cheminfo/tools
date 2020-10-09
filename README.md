@@ -37,6 +37,8 @@ It is **only** for npm-only packages. Please use the GRM for browser packages.
 - `-f, --force`: allows to skip some steps
 - `--no-docs`: do not generate and publish documentation
 - `-h, --help`: output usage information
+- `--migrate`: migrate the package publication to GitHub actions. This will push a new branch to GitHub.
+  Do not forget to create a Pull Request from it and immediately merge the PR.
 
 #### configuration
 
