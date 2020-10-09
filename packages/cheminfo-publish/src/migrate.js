@@ -50,4 +50,11 @@ function createReleaseBranch(packageJson) {
   child_process.execFileSync('git', ['checkout', 'master']);
 }
 
-module.exports = migrate;
+function hasAction() {
+  return fs.existsSync('.github/workflows/release.yml');
+}
+
+module.exports = {
+  hasAction,
+  migrate,
+};

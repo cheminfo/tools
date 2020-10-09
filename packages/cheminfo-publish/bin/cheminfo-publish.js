@@ -21,7 +21,7 @@ const terminalLink = require('terminal-link');
 
 const ERROR_COLOR = 'rgb(255,99,99)';
 
-const migrate = require('../src/migrate');
+const { migrate, hasAction } = require('../src/migrate');
 const generateDoc = require('../src/generateDoc');
 const util = require('../src/util');
 
@@ -95,6 +95,13 @@ This will skip the following steps:
   }
 
   cp.execFileSync('git', ['pull', '--rebase']);
+
+  if (hasAction()) {
+    console.log(
+      chalk`{${ERROR_COLOR} This repository is released using GitHub actions.}`,
+    );
+    process.exit(1);
+  }
 
   // Get npm username
   const name = await execNpmStdout('whoami');
