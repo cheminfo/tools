@@ -33,7 +33,7 @@ function createWorkflow(packageJson) {
   fs.mkdirSync('.github/workflows', { recursive: true });
   fs.writeFileSync(
     '.github/workflows/release.yml',
-    workflowTemplate.replace('PACKAGE_NAME', packageJson.name),
+    workflowTemplate.replace('PACKAGE-NAME', packageJson.name),
   );
 }
 
