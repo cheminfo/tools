@@ -1,6 +1,6 @@
 {
   "name": "cheminfo-publish",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "CLI tool to publish ChemInfo packages",
   "keywords": [],
   "scripts": {
