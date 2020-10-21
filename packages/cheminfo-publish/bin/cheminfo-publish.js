@@ -313,7 +313,7 @@ This will skip the following steps:
   }
 
   if (program.migrate) {
-    migrate();
+    await migrate();
     console.log(
       chalk`{${ERROR_COLOR} Migration branch created and pushed. Now create a pull request and merge it!}`,
     );

@@ -2,12 +2,13 @@
 
 const child_process = require('child_process');
 const fs = require('fs');
-const path = require('path');
 
-function migrate() {
+const got = require('got');
+
+async function migrate() {
   const packageJson = JSON.parse(fs.readFileSync('package.json'));
   renameHistory();
-  createWorkflow(packageJson);
+  await createWorkflow(packageJson);
   createReleaseBranch(packageJson);
 }
 
@@ -25,15 +26,16 @@ function renameHistory() {
   }
 }
 
-function createWorkflow(packageJson) {
-  const workflowTemplate = fs.readFileSync(
-    path.join(__dirname, 'release-workflow.txt'),
-    'utf-8',
-  );
+async function createWorkflow(packageJson) {
+  const workflowTemplateUrl =
+    'https://raw.githubusercontent.com/cheminfo/.github/master/workflow-templates/release.yml';
+  const { body: workflowTemplate } = await got(workflowTemplateUrl);
   fs.mkdirSync('.github/workflows', { recursive: true });
   fs.writeFileSync(
     '.github/workflows/release.yml',
-    workflowTemplate.replace('PACKAGE-NAME', packageJson.name),
+    workflowTemplate
+      .replace('$default-branch', 'master')
+      .replace('PACKAGE-NAME', packageJson.name),
   );
 }
 
