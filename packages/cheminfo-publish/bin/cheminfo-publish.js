@@ -111,7 +111,7 @@ This will skip the following steps:
   const packageLockPath = path.resolve(packageJSONPath, '../package-lock.json');
   // eslint-disable-next-line import/no-dynamic-require
   const packageJSON = require(packageJSONPath);
-  const hasPackageLock = await fs.exists(packageLockPath);
+  const hasPackageLock = fs.existsSync(packageLockPath);
 
   let org = program.org;
   if (!org) {
@@ -361,7 +361,7 @@ function getRecommendedBump() {
 
 async function updateHistory() {
   let HISTORY_FILE = 'CHANGELOG.md';
-  if (await fs.exists('History.md')) {
+  if (fs.existsSync('History.md')) {
     HISTORY_FILE = 'History.md';
   }
 
@@ -369,7 +369,7 @@ async function updateHistory() {
     config: conventionalCommits(),
     releaseCount: 1,
   };
-  if (await fs.exists(HISTORY_FILE)) {
+  if (fs.existsSync(HISTORY_FILE)) {
     // File exists. Append latest version to current history.
     const newHistory = await createChangelog(changelogOptions);
     if (newHistory.length === 0) {
