@@ -102,6 +102,9 @@ function getInputOptions(options = {}) {
   const { minify = false } = options;
   const rollupOptions = {
     input: path.resolve(cwd, entryPoint),
+    treeshake: {
+      moduleSideEffects: ['openchemlib'],
+    },
     plugins: [
       nodeResolve({ browser: true }),
       commonjs(),
