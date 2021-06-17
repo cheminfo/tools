@@ -82,8 +82,10 @@ This will skip the following steps:
 
   const currentBranch = await git.branchName();
   debug('current branch is %s', currentBranch);
-  if (currentBranch !== 'master') {
-    errorLog(`You must be on master branch. Current branch: ${currentBranch}`);
+  if (currentBranch !== 'master' && currentBranch !== 'main') {
+    errorLog(
+      `You must be on master or main branch. Current branch: ${currentBranch}`,
+    );
     return;
   }
 
@@ -309,11 +311,11 @@ This will skip the following steps:
 
   // Documentation
   if (program.docs) {
-    await generateDoc(true);
+    await generateDoc(true, currentBranch);
   }
 
   if (program.migrate) {
-    await migrate();
+    await migrate(currentBranch);
     console.log(
       chalk`{${ERROR_COLOR} Migration branch created and pushed. Now create a pull request and merge it!}`,
     );

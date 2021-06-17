@@ -10,7 +10,10 @@ const touch = require('touch');
 
 const { detectTypescript, detectTypedoc, getPackageJson } = require('./util');
 
-module.exports = async function generateDoc(pushToGithub) {
+module.exports = async function generateDoc(
+  pushToGithub,
+  mainBranch = 'master',
+) {
   const pack = await getPackageJson();
   const opts = getOptions(pack);
   let builtDocs = false;
@@ -94,7 +97,7 @@ module.exports = async function generateDoc(pushToGithub) {
     if (pushToGithub) {
       await execa('git', ['add', 'docs']);
       await execa('git', ['commit', '-m', 'doc: rebuild docs']);
-      await execa('git', ['push', 'origin', 'master']);
+      await execa('git', ['push', 'origin', mainBranch]);
       console.log('Committed and pushed to GitHub');
     }
   }
