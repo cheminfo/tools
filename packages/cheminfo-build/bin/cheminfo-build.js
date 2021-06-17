@@ -11,11 +11,12 @@ const commonjs = require('@rollup/plugin-commonjs');
 const json = require('@rollup/plugin-json');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const { terser } = require('rollup-plugin-terser');
-const yargs = require('yargs');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
 
 const banner = require('../src/banner');
 
-const program = yargs
+const program = yargs(hideBin(process.argv))
   .option('cwd', {
     alias: 'c',
     describe: 'Working directory',
