@@ -7,6 +7,7 @@ const fs = require('fs');
 
 const rollup = require('rollup');
 const { babel } = require('@rollup/plugin-babel');
+const replace = require('@rollup/plugin-replace');
 const commonjs = require('@rollup/plugin-commonjs');
 const json = require('@rollup/plugin-json');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
@@ -107,6 +108,10 @@ function getInputOptions(options = {}) {
       moduleSideEffects: ['openchemlib'],
     },
     plugins: [
+      replace({
+        values: { 'process.env.NODE_ENV': JSON.stringify('production') },
+        preventAssignment: true,
+      }),
       nodeResolve({ browser: true }),
       commonjs(),
       json(),
