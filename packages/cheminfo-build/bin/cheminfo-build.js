@@ -11,7 +11,7 @@ const replace = require('@rollup/plugin-replace');
 const commonjs = require('@rollup/plugin-commonjs');
 const json = require('@rollup/plugin-json');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const { terser } = require('rollup-plugin-terser');
+const terser = require('@rollup/plugin-terser');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 
@@ -113,7 +113,7 @@ function getInputOptions(options = {}) {
         preventAssignment: true,
       }),
       nodeResolve({ browser: true }),
-      commonjs(),
+      commonjs({ strictRequires: 'auto' }),
       json(),
       babel({
         babelHelpers: 'bundled',
