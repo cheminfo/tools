@@ -1,5 +1,7 @@
 # Cheminfo tools
 
+Build package moved to https://github.com/cheminfo/cheminfo-build
+
 CLI tools to help cheminfo developers.
 
 ## Available tools
